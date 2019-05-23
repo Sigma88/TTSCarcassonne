@@ -251,7 +251,7 @@ EXPANSION_BAGS = {
         ['FlierDie'] = {guid = 'dc7bf3'}
     }},
     ['Ferries'] = {guid = '5506dd', contents = {
-        ['FerriesTiles'] = {guid = 'fc5427'}
+        ['FerriesTiles'] = {guid = 'd6deb6'}
     }},
     ['Goldmines'] = {guid = '080d67', contents = {
         ['GoldminesTiles'] = {guid = 'bc8fac'},
