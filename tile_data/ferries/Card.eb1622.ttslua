@@ -1,4 +1,0 @@
-sides = {'City', 'Road', 'Road', 'Road'}
-linkedQuadrants = {{2, 3}}
-linkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}
-specialFeatures = {{'Lake', {2, 3}, nil}} 
