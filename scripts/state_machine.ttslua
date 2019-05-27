@@ -58,8 +58,12 @@ stateMachine = {
         ['next'] = 'check added tile feature - gold'
     },
     ['check added tile feature - gold'] = {
-        ['next'] = 'awaiting figure decision',
+        ['next'] = 'check added tile feature - lake'
         ['has gold'] = 'place gold on tile'
+    },
+    ['check added tile feature - lake'] = {
+        ['next'] = 'awaiting figure decision',
+        ['has lake'] = 'place gold on tile'
     },
     ['place gold on tile'] = {
         ['next'] = 'awaiting gold placement'
@@ -299,6 +303,8 @@ function playerStateHandler()
     elseif turnState == 'awaiting gold placement' then
         gameNotification({"MESSAGE_GOLD_MINES_PLACE_GOLD_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
         return displayGoldButtons()
+    elseif turnState == 'check added tile feature - lake' then
+        return checkTileForLake()
     elseif turnState == 'awaiting figure decision' then
         gameNotification({"MESSAGE_FIGURE_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
 
