@@ -61,14 +61,13 @@ stateMachine = {
         ['next'] = 'check added tile feature - lake'
         ['has gold'] = 'place gold on tile'
     },
-    ['check added tile feature - lake'] = {
-        ['next'] = 'awaiting figure decision',
-        ['has lake'] = 'place gold on tile'
-    },
     ['place gold on tile'] = {
         ['next'] = 'awaiting gold placement'
     },
     ['awaiting gold placement'] = {
+        ['next'] = 'awaiting figure decision'
+    },
+    ['check added tile feature - lake'] = {
         ['next'] = 'awaiting figure decision'
     },
     ['awaiting figure decision'] = {
@@ -129,6 +128,12 @@ stateMachine = {
         ['next'] = 'post figure events'
     },
     ['post figure events'] = {
+        ['next'] = 'post figure events - palace ferry'
+    },
+    ['post figure events - palace ferry'] = {
+        ['next'] = 'post figure events - move ferry'
+    },
+    ['post figure events - move ferry'] = {
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - phantom'] = {
