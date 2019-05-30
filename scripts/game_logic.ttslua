@@ -1062,7 +1062,7 @@ function displayFerryButtons()
             if a==2 and b==3 then
                 local placeFerryButtonParam =
                 {
-                   index = i, label = 'Connect streets\n' .. a .. ' and ' .. b, click_function = 'placeFerryButton' .. a .. b,
+                   index = i, label = 'Connect streets ' .. a .. ' and ' .. b, click_function = 'placeFerryButton' .. a .. b,
                    position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=0}, width = 800, height=600, font_size = 200, function_owner = nil
                 }
                 createNormalizedArbitraryButton
@@ -1081,7 +1081,6 @@ function displayFerryButtons()
 end
 
 function placeFerryButton23()
-{
     tile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
     if tile ~= nil then
         if tile.guid ~= nil then
@@ -1095,7 +1094,7 @@ function placeFerryButton23()
     print(tile)
     print(tile.guid)
     print(FerriesLinkedQuadrants[tile.guid])
-}
+end
 
 function displayGoldButtons()
     for i, offset in ipairs(DIAGONAL_DELTA) do
