@@ -400,7 +400,7 @@ function playerStateHandler()
         seducedKnights = {}
         currentPlayerAbbot = nil
         if checkTileForLake() then
-            return nextState('post figure events - place ferry')
+            return nextState('has lake')
         end
         return nextState('next')
     elseif turnState == 'post figure events - place ferry' then
