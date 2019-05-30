@@ -14,8 +14,8 @@ tileSettings = {
         ['CultTiles'] = {},
         ['CultBonusTile'] = {}
     }},
-	['CatapultTiles'] = {['Catapult'] = {['CatapultTiles'] = {}}},
-	['BCnBTiles'] = {['BCnB'] = {['BCnBTiles'] = {}}},
+    ['CatapultTiles'] = {['Catapult'] = {['CatapultTiles'] = {}}},
+    ['BCnBTiles'] = {['BCnB'] = {['BCnBTiles'] = {}}},
     ['HnSTiles'] = {['HnS'] = {['HnSTiles'] = {}}},
     ['WoFTiles'] = {['WoF'] = {['WoFTiles'] = {}}},
     ['WoFWheelTiles'] = {['WoF'] = {['WoFWheelTiles'] = {}}},

@@ -125,6 +125,10 @@ stateMachine = {
         ['next'] = 'post figure events'
     },
     ['post figure events'] = {
+        ['has lake'] = 'post figure events - place ferry',
+        ['next'] = 'post figure events - phantom'
+    },
+    ['post figure events - place ferry'] = {
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - phantom'] = {
@@ -395,7 +399,13 @@ function playerStateHandler()
         clearFigureOptions()
         seducedKnights = {}
         currentPlayerAbbot = nil
+        if checkTileForLake() then
+            return nextState('post figure events - place ferry')
+        end
         return nextState('next')
+    elseif turnState == 'post figure events - place ferry' then
+        gameNotification({\"MESSAGE_LAKE_PLACE_FERRY_PROMPT\"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
+        return displayFerryButtons()
     elseif turnState == 'post figure events - phantom' then
         getActiveFigures()
         if baselineFigures[activePlayers[currentPlayer]]['Phantom'] then

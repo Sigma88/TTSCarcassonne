@@ -222,7 +222,7 @@ function endGameButton(object, sPlayer)
         endGameButtonParam.label = translate('BUTTON_LABEL_SCORE_SUMMARY')
         endGameButtonParam.click_function = 'printScoreSummaryButton'
         buttonBoard.editButton(endGameButtonParam)
-      	clearArbitraryButtons(true)
+          clearArbitraryButtons(true)
         if scoring ~= true then
             turnState = 'game over - prompt moving from carcassonne'
             return stateHandler()
@@ -1017,6 +1017,18 @@ function checkTileForMagicPortal()
     return nextState('next')
 end
 
+function checkTileForLake()
+    local tileFeatures = tileGrid[lastPlacedTileX][lastPlacedTileZ].tileFeatures
+    if controlPanelSettings['FerriesTiles'] and tileFeatures ~= nil then
+        for _, tileFeature in ipairs(tileFeatures) do
+            if tileFeature == 'Lake' then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function checkTileForGold()
     local tileFeatures = tileGrid[lastPlacedTileX][lastPlacedTileZ].tileFeatures
     if controlPanelSettings['GoldminesGold'] and tileFeatures ~= nil then
@@ -1043,6 +1055,47 @@ function addGoldToTile(xIndex, zIndex)
     end
     nextState('next')
 end
+
+function displayFerryButtons()
+    for a=1,3 do
+        for b=a+1,4 do
+            if a==2 and b==3 then
+                local placeFerryButtonParam =
+                {
+                   index = i, label = 'Connect streets\n' .. a .. ' and ' .. b, click_function = 'placeFerryButton' .. a .. b,
+                   position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=0}, width = 800, height=600, font_size = 200, function_owner = nil
+                }
+                createNormalizedArbitraryButton
+                (
+                    {
+                        x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x,
+                        y=TABLE_SURFACE_Y + TILE_THICKNESS / 2,
+                        z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z
+                    },
+                    placeFerryButtonParam,
+                    false
+                )
+            end
+        end
+    end
+end
+
+function placeFerryButton23()
+{
+    tile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
+    if tile ~= nil then
+        if tile.guid ~= nil then
+            if FerriesLinkedQuadrants ~= nil then
+                FerriesLinkedQuadrants[tile.guid] = {{2,3}}
+            end
+        end
+    end
+    print('TEST')
+    print(FerriesLinkedQuadrants)
+    print(tile)
+    print(tile.guid)
+    print(FerriesLinkedQuadrants[tile.guid])
+}
 
 function displayGoldButtons()
     for i, offset in ipairs(DIAGONAL_DELTA) do
@@ -1375,26 +1428,26 @@ function retrieveAbbotButton(object, sPlayer)
 end
 
 function promptTowerCapture()
-	local towerRange = numberActiveTowers
+    local towerRange = numberActiveTowers
     if controlPanelSettings['TowersNerfTower'] then
-		towerRange = numberActiveTowers - 1
-	end
+        towerRange = numberActiveTowers - 1
+    end
     getObjectFromGUID(tileGrid[towerX][towerZ].tile_guid).highlightOn({1,0,0})
-	if towerRange > 0 then
-		for i=1, towerRange do
-			for side, sideDelta in pairs(SIDE_DELTA) do
-				if tileGridOccupied(towerX + sideDelta.x * i, towerZ + sideDelta.z * i) then
-					getObjectFromGUID(tileGrid[towerX + sideDelta.x * i][towerZ + sideDelta.z * i].tile_guid).highlightOn({1,0,0})
-				end
-			end
-		end
-	end
+    if towerRange > 0 then
+        for i=1, towerRange do
+            for side, sideDelta in pairs(SIDE_DELTA) do
+                if tileGridOccupied(towerX + sideDelta.x * i, towerZ + sideDelta.z * i) then
+                    getObjectFromGUID(tileGrid[towerX + sideDelta.x * i][towerZ + sideDelta.z * i].tile_guid).highlightOn({1,0,0})
+                end
+            end
+        end
+    end
     local hasFollower = false
     capturableFollowers = {}
     for _, obj in ipairs(getObjectFromGUID(PLAY_AREA_SCRIPTING_ZONE_GUID).getObjects()) do
         if table.contains(FOLLOWER_TYPES, obj.getVar('figureName')) then
             local xIndex, zIndex, _, _ = getFigureTileLocation(obj)
-			if tileGridOccupied(xIndex, zIndex) then
+            if tileGridOccupied(xIndex, zIndex) then
                 if (xIndex == towerX and zIndex <= towerZ + towerRange and zIndex >= towerZ - towerRange) or (zIndex == towerZ and xIndex <= towerX + towerRange and xIndex >= towerX - towerRange) then
                     local captureFollowerButtonParam = {
                        index = 1, label = translate({"BUTTON_LABEL_CAPTURE", {"{f1}", obj.getName()}}), click_function = 'captureFollowerButton',
@@ -2532,7 +2585,7 @@ function scoreFeatures()
                                                                 if table.contains(FOLLOWER_TYPES, object.getVar('figureName')) then
                                                                     local objectXIndex, objectZIndex, xPosition, zPosition = getFigureTileLocation(object)
                                                                     if objectXIndex == xIndex + x and objectZIndex == zIndex + z then
-                                                        				local nestedClosestTilePosition = findClosestTilePosition(xIndex + x, zIndex + z, xPosition, zPosition)
+                                                                        local nestedClosestTilePosition = findClosestTilePosition(xIndex + x, zIndex + z, xPosition, zPosition)
                                                                         if nestedClosestTilePosition == i + 12 then
                                                                             object.setLock(false)
                                                                             object.use_gravity = false
@@ -3594,4 +3647,18 @@ function getTileFeatureName(tile, position)
         end
     end
     return nameOfFeature
+end
+
+function getLinkedQuadrants(tile)
+    if tile ~= nil then
+        if tile.guid ~= nil then
+            if FerriesLinkedQuadrants ~= nil then
+                local t = FerriesLinkedQuadrants[tile.guid]
+                if t ~= nil then
+                    return t
+                end
+            end
+        end
+    end
+    return tile.getTable('linkedQuadrants')
 end
