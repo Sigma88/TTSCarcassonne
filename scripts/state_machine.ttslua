@@ -405,7 +405,7 @@ function playerStateHandler()
         return nextState('next')
     elseif turnState == 'post figure events - place ferry' then
         gameNotification({"MESSAGE_LAKE_PLACE_FERRY_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
-        return displayFerryButtons()
+        return displayFerryButtons(tileGrid[lastPlacedTileX][lastPlacedTileZ])
     elseif turnState == 'post figure events - phantom' then
         getActiveFigures()
         if baselineFigures[activePlayers[currentPlayer]]['Phantom'] then
