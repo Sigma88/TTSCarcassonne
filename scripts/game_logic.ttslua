@@ -1056,6 +1056,24 @@ function addGoldToTile(xIndex, zIndex)
     nextState('next')
 end
 
+function addFerryToTile(xIndex, zIndex)
+    local goldbag = getObjectFromGUID('6822b2')
+    local tile = getObjectFromGUID(tileGrid[xIndex][zIndex].tile_guid)
+    if goldbag ~= nil then
+        local xDestination = (xIndex * TILE_SPACING) - MIDDLE_OFFSET.x
+        local zDestination = (zIndex * TILE_SPACING) - MIDDLE_OFFSET.z
+
+        local params = {}
+        params.position = tile.getPosition()--{xDestination, 1.5, zDestination}
+        params.position.y = params.position.y + 1.5
+        params.rotation = tile.getRotation()
+        params.rotation.y = params.rotation.y + 45
+        params.callback_function = function(obj) take_callback(obj, futureName) end
+
+        goldbag.takeObject(params)
+    end
+end
+
 function displayFerryButtons()
     if lastFerryTile ~= nil then
         local offsets =
@@ -1133,6 +1151,7 @@ function placeFerryOn(link)
     if FerriesLinkedQuadrants ~= nil and lastFerryTile ~= nil then
         FerriesLinkedQuadrants[lastFerryTile.tile_guid] = link
         addTile(lastFerryPos.x, lastFerryPos.z, getObjectFromGUID(lastFerryTile.tile_guid), lastFerryTile.rotation, false)
+        addFerryToTile(lastFerryPos.x, lastFerryPos.z)
     end
     lastFerryTile = nil
     lastFerryPos = nil
