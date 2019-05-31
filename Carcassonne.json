@@ -45304,14 +45304,14 @@
           "Hands": false,
           "SidewaysCard": false,
           "DeckIDs": [
-            5605,
-            5606,
-            5607,
-            5603,
+            5600,
             5601,
             5602,
+            5603,
             5604,
-            5600
+            5605,
+            5606,
+            5607
           ],
           "CustomDeck": {
             "56": {
@@ -45357,7 +45357,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5605,
+              "CardID": 5600,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45370,7 +45370,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "6b2fe7"
             },
@@ -45404,7 +45404,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5606,
+              "CardID": 5601,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45417,7 +45417,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "3c41d0"
             },
@@ -45451,7 +45451,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5607,
+              "CardID": 5602,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45464,7 +45464,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "65ec9e"
             },
@@ -45545,7 +45545,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5601,
+              "CardID": 5604,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45558,7 +45558,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "c41adc"
             },
@@ -45592,7 +45592,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5602,
+              "CardID": 5605,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45605,7 +45605,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "626d48"
             },
@@ -45639,7 +45639,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5604,
+              "CardID": 5606,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
@@ -45652,7 +45652,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'Field', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "d15b0d"
             },
@@ -45686,7 +45686,7 @@
               "GridProjection": false,
               "HideWhenFaceDown": true,
               "Hands": true,
-              "CardID": 5600,
+              "CardID": 5607,
               "SidewaysCard": false,
               "CustomDeck": {
                 "56": {
