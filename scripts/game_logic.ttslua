@@ -1550,7 +1550,7 @@ function promptTowerCapture()
         if table.contains(FOLLOWER_TYPES, obj.getVar('figureName')) then
             local xIndex, zIndex, _, _ = getFigureTileLocation(obj)
             if tileGridOccupied(xIndex, zIndex) then
-                if (xIndex == towerX and zIndex < = towerZ + towerRange and zIndex > = towerZ - towerRange) or (zIndex == towerZ and xIndex < = towerX + towerRange and xIndex > = towerX - towerRange) then
+                if (xIndex == towerX and zIndex <= towerZ + towerRange and zIndex >= towerZ - towerRange) or (zIndex == towerZ and xIndex <= towerX + towerRange and xIndex >= towerX - towerRange) then
                     local captureFollowerButtonParam = {
                        index = 1, label = translate({"BUTTON_LABEL_CAPTURE", {"{f1}", obj.getName()}}), click_function = 'captureFollowerButton',
                        position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1100, height = 600, font_size = 200, function_owner = nil
@@ -2717,7 +2717,7 @@ function scoreFeatures()
                         for player, value in pairs(followerCounts) do
                             if nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature, 1, 8) ~= 'Quarter-' and string.sub(nameOfFeature, 1, 6) ~= 'Crown-' and nameOfFeature ~= 'Tower Foundation' and string.sub(nameOfFeature, 1, 6) ~= 'Flier' then
                                 if gameover or featureComplete or (nameOfFeature == 'Field' and hasBarn and #featureFollowers > 0) or (gameover and hasBarn and #featureFollowers == 0) then
-                                    if (topWeight > 0 and value > = topWeight) then
+                                    if (topWeight > 0 and value >= topWeight) then
                                         local playerScore = score
                                         if nameOfFeature == 'Field' then
                                             local scoreMultiplier = 3
@@ -2776,7 +2776,7 @@ function scoreFeatures()
                                         wagonFeatures[follower.getVar('owner')] = featureNum
                                     end
                                     local winner = false
-                                    if topWeight > 0 and followerCounts[follower.getVar('owner')] > = topWeight and score > 0 then winner = true end
+                                    if topWeight > 0 and followerCounts[follower.getVar('owner')] >= topWeight and score > 0 then winner = true end
                                     if winner and nameOfFeature ~= 'Field' and #traversedGoldBars > 0 then
                                         if scoringRewards['Gold'] == nil then scoringRewards['Gold'] = {} end
                                         for _, gold in ipairs(traversedGoldBars) do
@@ -2799,7 +2799,7 @@ function scoreFeatures()
                                     if figure.getVar('figureName') ~= 'Shepherd' and (figure.getVar('figureName') ~= 'Barn' or (figure.getVar('figureName') == 'Barn' and #featureFollowers == 0 and gameover)) then
                                         local winner = false
                                         --builder not involved in scoring, so shouldn't be praised
-                                        if figure.getVar('figureName') ~= 'Builder' and topWeight > 0 and followerCounts[figure.getVar('owner')] > = topWeight and score > 0 then winner = true end
+                                        if figure.getVar('figureName') ~= 'Builder' and topWeight > 0 and followerCounts[figure.getVar('owner')] >= topWeight and score > 0 then winner = true end
                                         table.insert(removedFigures, {guid = figure.getGUID(), winner = winner})
                                         figure.setLock(false)
                                         figure.use_gravity = false
@@ -2945,7 +2945,7 @@ function scoreFeatures()
                                 if getFeatureComponents(x, z, i, 1, false) == 0 then
                                     numRoads = numRoads + 1
                                 end
-                            elseif controlPanelSettings['KnRBKing'] and i > = 5 and (getTileFeatureName(tile, i) == 'City' or getTileFeatureName(tile, i) == 'Carcassonne') then
+                            elseif controlPanelSettings['KnRBKing'] and i >= 5 and (getTileFeatureName(tile, i) == 'City' or getTileFeatureName(tile, i) == 'Carcassonne') then
                                 if getFeatureComponents(x, z, i, 1, false) == 0 then
                                     numCities = numCities + 1
                                 end
@@ -3280,7 +3280,7 @@ function hasAvailableWagonFeature(wagonFeatureNum)
                         end
                     end
                 end
-                if numOpenings < = 0 then
+                if numOpenings <= 0 then
                     linkedRoadFeatures[linkedFeatureNum] = nil
                 end
             elseif featureList[linkedFeatureNum].numOpenings == 0 then
