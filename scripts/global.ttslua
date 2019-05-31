@@ -292,6 +292,7 @@ EXPANSION_BAGS = {
 tileGrid = {}
 lastPlacedTileX = nil
 lastPlacedTileZ = nil
+PlacedFerries = {}
 FerriesLinkedQuadrants = {}
 lastFerryTile = nil
 lastFerryPos = nil
