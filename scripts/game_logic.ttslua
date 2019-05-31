@@ -1019,7 +1019,7 @@ end
 
 function checkTileForLake()
     local tileFeatures = tileGrid[lastPlacedTileX][lastPlacedTileZ].tileFeatures
-    if controlPanelSettings['FerriesTiles'] and tileFeatures ~= nil then
+    if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] and tileFeatures ~= nil then
         for _, tileFeature in ipairs(tileFeatures) do
             if tileFeature == 'Lake' then
                 return true
