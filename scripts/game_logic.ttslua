@@ -184,7 +184,7 @@ function startGameButton(object, sPlayer)
         end
         local hasTileStack = false
         for controlPanelSetting, settingOn in pairs(controlPanelSettings) do
-            if settingOn and table.contains({'BaseTiles', 'InCTiles', 'TnBTiles', 'PnDTiles', 'TowerTiles', 'AnMTiles', 'KnRBTiles', 'CultTiles', 'CatapultTiles', 'BCnBTiles', 'HnSTiles', 'WoFTiles', 'WoFWheelTiles', 'FlierTiles', 'GoldminesTiles'}, controlPanelSetting) then
+            if settingOn and table.contains({'BaseTiles', 'InCTiles', 'TnBTiles', 'PnDTiles', 'TowerTiles', 'AnMTiles', 'KnRBTiles', 'CultTiles', 'CatapultTiles', 'BCnBTiles', 'HnSTiles', 'WoFTiles', 'WoFWheelTiles', 'FlierTiles', 'FerriesTiles', 'GoldminesTiles'}, controlPanelSetting) then
                 hasTileStack = true
             end
         end
