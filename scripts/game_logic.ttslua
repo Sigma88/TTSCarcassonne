@@ -132,7 +132,7 @@ end
 --gets the name of the person/AI controlling this color
 function getPlayerOwnerName(color)
     local owner = getPlayerOwner(color)
-    if owner:sub(1,2) == 'AI' then
+    if owner:sub(1, 2) == 'AI' then
         return owner
     elseif Player[owner].steam_name == nil then
         return "no one"
@@ -184,7 +184,7 @@ function startGameButton(object, sPlayer)
         end
         local hasTileStack = false
         for controlPanelSetting, settingOn in pairs(controlPanelSettings) do
-            if settingOn and table.contains({'BaseTiles','InCTiles','TnBTiles','PnDTiles','TowerTiles','AnMTiles','KnRBTiles','CultTiles','CatapultTiles','BCnBTiles','HnSTiles','WoFTiles','WoFWheelTiles','FlierTiles','GoldminesTiles'}, controlPanelSetting) then
+            if settingOn and table.contains({'BaseTiles', 'InCTiles', 'TnBTiles', 'PnDTiles', 'TowerTiles', 'AnMTiles', 'KnRBTiles', 'CultTiles', 'CatapultTiles', 'BCnBTiles', 'HnSTiles', 'WoFTiles', 'WoFWheelTiles', 'FlierTiles', 'GoldminesTiles'}, controlPanelSetting) then
                 hasTileStack = true
             end
         end
@@ -193,7 +193,7 @@ function startGameButton(object, sPlayer)
             return
         end
         for _, player_color in ipairs(PLAYER_COLORS) do
-            if controlPanelSettings[player_color .. 'Control'] ~= nil and controlPanelSettings[player_color .. 'Control']:sub(1,2) == 'AI' then
+            if controlPanelSettings[player_color .. 'Control'] ~= nil and controlPanelSettings[player_color .. 'Control']:sub(1, 2) == 'AI' then
                 local illegalExpansion = false
                 local illegalExpansionList = ""
                 for controlPanelSetting, settingOn in pairs(controlPanelSettings) do
@@ -470,7 +470,7 @@ end
 function checkAddedTileSpecialFigureExtensions()
     getActiveFigures()
 
-    for featureMapPosition=1, 12 do
+    for featureMapPosition = 1, 12 do
         local addedFeatureNum = getFeatureNumAt(lastPlacedTileX, lastPlacedTileZ, featureMapPosition)
         if activeFigures[addedFeatureNum] ~= nil then
             if featureList[addedFeatureNum].nameOfFeature ~= 'Abbey' then --do not give give sheep/extra builder tile (CAR ref 149)
@@ -523,7 +523,7 @@ function checkTileForHill()
                 newTile.use_gravity = false
                 newTile.interactable = false
                 newTile.setPositionSmooth({newTile.getPosition().x, newTile.getPosition().y + 2, newTile.getPosition().z}, false, false)
-                Timer.create({identifier=newTile.getGUID() .. os.clock(), function_name='freezeFloatingHillTile', function_owner=nil, parameters={tile=newTile, buriedTile=buriedTile_obj}, delay=0.8})
+                Timer.create({identifier = newTile.getGUID() .. os.clock(), function_name = 'freezeFloatingHillTile', function_owner = nil, parameters = {tile = newTile, buriedTile = buriedTile_obj}, delay = 0.8})
                 return
             end
         end
@@ -538,7 +538,7 @@ function freezeFloatingHillTile(param)
     local tile = param.tile
     local buriedTile = param.buriedTile
     tile.setLock(true)
-    Timer.create({identifier=tile.getGUID() .. os.clock(), function_name='unfreezeFloatingHillTile', function_owner=nil, parameters={tile=tile, buriedTile=buriedTile}, delay=0.5})
+    Timer.create({identifier = tile.getGUID() .. os.clock(), function_name = 'unfreezeFloatingHillTile', function_owner = nil, parameters = {tile = tile, buriedTile = buriedTile}, delay = 0.5})
 end
 
 --unlock the tile and wait for it to fall back down
@@ -547,7 +547,7 @@ function unfreezeFloatingHillTile(param)
     local buriedTile = param.buriedTile
     tile.use_gravity = true
     tile.setLock(false)
-    Timer.create({identifier=tile.getGUID() .. os.clock(), function_name='finishHillTile', function_owner=nil, parameters={tile=tile, buriedTile=buriedTile}, delay=0.8})
+    Timer.create({identifier = tile.getGUID() .. os.clock(), function_name = 'finishHillTile', function_owner = nil, parameters = {tile = tile, buriedTile = buriedTile}, delay = 0.8})
 end
 
 --lock the tile and other post tile actions
@@ -579,12 +579,12 @@ function checkTileForWheel()
     local specialFeatures = newTile.getTable('specialFeatures')
     if specialFeatures ~= nil then
         for _, specialFeature in ipairs(specialFeatures) do
-            if pigIsEnabled() and string.sub(specialFeature[1],1,6) == 'Wheel-' then
-                local pos_moved = string.sub(specialFeature[1],7,7)
-                startAnimation({type='WoFPig', start_time=os.clock(), start_position=wofPigPosition, num_positions_moved=pos_moved})
+            if pigIsEnabled() and string.sub(specialFeature[1], 1, 6) == 'Wheel-' then
+                local pos_moved = string.sub(specialFeature[1], 7, 7)
+                startAnimation({type = 'WoFPig', start_time = os.clock(), start_position = wofPigPosition, num_positions_moved = pos_moved})
                 wofPigPosition = wofPigPosition + pos_moved
                 if wofPigPosition > 6 then wofPigPosition = wofPigPosition - 6 end
-                Timer.create({identifier=newTile.getGUID() .. os.clock(), function_name='resolveWheel', function_owner=nil, parameters={}, delay=ANIMATION_PIG_ACCEL_TIME * 2 + (pos_moved - 1) * ANIMATION_PIG_TIME_PER_SPACE + 0.5}) --0.5 is an arbitrary delay
+                Timer.create({identifier = newTile.getGUID() .. os.clock(), function_name = 'resolveWheel', function_owner = nil, parameters = {}, delay = ANIMATION_PIG_ACCEL_TIME * 2 + (pos_moved - 1) * ANIMATION_PIG_TIME_PER_SPACE + 0.5}) --0.5 is an arbitrary delay
                 return
             end
         end
@@ -701,7 +701,7 @@ function resolvePlague()
         end
         local removableFigures = {}
         for featureNum, figures in pairs(activeFigures) do
-            if string.sub(featureList[featureNum].nameOfFeature,1,6) ~= 'Crown-' and string.sub(featureList[featureNum].nameOfFeature,1,8) ~= 'Quarter-' then
+            if string.sub(featureList[featureNum].nameOfFeature, 1, 6) ~= 'Crown-' and string.sub(featureList[featureNum].nameOfFeature, 1, 8) ~= 'Quarter-' then
                 for _, follower in ipairs(figures.followers) do
                     if follower.getVar('owner') == activePlayers[currentMiniTurn] then
                         table.insert(removableFigures, follower)
@@ -713,7 +713,7 @@ function resolvePlague()
             allGameMessage({"MESSAGE_WHEEL_PLAGUE_PLAYER_SKIPPED", {'{p1}', getPlayerOwnerName(activePlayers[currentMiniTurn])}}, player_color_tints[activePlayers[currentMiniTurn]], activePlayers[currentMiniTurn])
         elseif #removableFigures == 1 then
             allGameMessage({"MESSAGE_WHEEL_PLAGUE_FOLLOWER_AUTOMATICALLY_REMOVED", {'{p1}', getPlayerOwnerName(activePlayers[currentMiniTurn])}}, player_color_tints[activePlayers[currentMiniTurn]], activePlayers[currentMiniTurn])
-            table.insert(removedFigures, {guid=removableFigures[1].getGUID(), winner=false})
+            table.insert(removedFigures, {guid = removableFigures[1].getGUID(), winner = false})
             removeDependentFigures(removableFigures[1])
             return returnFigures()
         else
@@ -721,7 +721,7 @@ function resolvePlague()
             for _, follower in ipairs(removableFigures) do
                 local plaguedFollowerButtonParam = {
                    index = 1, label = translate("BUTTON_LABEL_RETURN_FOLLOWER"), click_function = 'plaguedFollowerButton',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1700, height=600, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1700, height = 600, font_size = 200, function_owner = nil
                 }
                 createNormalizedButton(follower, plaguedFollowerButtonParam, true)
             end
@@ -737,7 +737,7 @@ function plaguedFollowerButton(object, sPlayer)
         --although we later remove these buttons, there is a slight delay during the figure removal, so we remove them now
         clearArbitraryButtons()
 
-        table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+        table.insert(removedFigures, {guid = object.getGUID(), winner = false})
         allGameMessage({"MESSAGE_WHEEL_PLAGUE_REMOVAL", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, player_color_tints[object.getVar('owner')])
         removeDependentFigures(object)
         return returnFigures()
@@ -768,7 +768,7 @@ function rewardCrownSpaces()
                     getFeatureComponents(xIndex, zIndex, closestTilePosition, 2, i == 1)
                 end
 
-                table.insert(removedFigures, {guid=follower.getGUID(), winner=true})
+                table.insert(removedFigures, {guid = follower.getGUID(), winner = true})
                 follower.setLock(false)
                 follower.use_gravity = false
                 follower.interactable = false
@@ -776,7 +776,7 @@ function rewardCrownSpaces()
                 follower.setPositionSmooth({follower.getPosition().x, follower.getPosition().y + 2.5, follower.getPosition().z}, false, false)
             end
             if showMarkers == 'Both' or showMarkers == 'Scoring' then
-                Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
             else
                 returnFigures()
             end
@@ -854,7 +854,7 @@ function createDragonButtons()
     local dragon = getObjectFromGUID(dragon_GUID)
     local xIndex, zIndex, _, _ = getFigureTileLocation(dragon)
     local hasValidMove = false
-    for i=1, 4 do
+    for i = 1, 4 do
         local newX = xIndex + SIDE_DELTA[i].x
         local newZ = zIndex + SIDE_DELTA[i].z
         if tileGridOccupied(newX, newZ) and not table.contains(dragonIllegalTiles, {newX, newZ}) then
@@ -878,9 +878,9 @@ function createDragonButtons()
             end
             local moveDragonButtonParam = {
                index = i, label = label, click_function = click_function,
-               position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=0}, width = 800, height=600, font_size = font_size, function_owner = nil
+               position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 0}, width = 800, height = 600, font_size = font_size, function_owner = nil
             }
-            createNormalizedArbitraryButton({x=-newX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=newZ * TILE_SPACING - MIDDLE_OFFSET.z}, moveDragonButtonParam, false)
+            createNormalizedArbitraryButton({x = -newX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = newZ * TILE_SPACING - MIDDLE_OFFSET.z}, moveDragonButtonParam, false)
         end
     end
 
@@ -928,7 +928,7 @@ function moveDragonDirection(i)
     dragonMovesRemaining = dragonMovesRemaining - 1
     currentMiniTurn = currentMiniTurn + 1
     table.insert(dragonIllegalTiles, {xIndex, zIndex})
-    getObjectFromGUID(tileGrid[xIndex][zIndex].tile_guid).highlightOn({1,0,0})
+    getObjectFromGUID(tileGrid[xIndex][zIndex].tile_guid).highlightOn({1, 0, 0})
 
     moveDragonToTile(xIndex, zIndex)
 end
@@ -961,11 +961,11 @@ function moveDragonToTile(xIndex, zIndex)
                     local tile = getObjectFromGUID(tileGrid[xIndex][zIndex].tile_guid)
                     local closestTilePosition = findClosestTilePosition(xIndex, zIndex, xPosition, zPosition)
                     local nameOfFeature = getTileFeatureName(tile, closestTilePosition)
-                    if string.sub(nameOfFeature,1,8) ~= 'Quarter-' and nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature,1,6) ~= 'Crown-' then
+                    if string.sub(nameOfFeature, 1, 8) ~= 'Quarter-' and nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature, 1, 6) ~= 'Crown-' then
                         --an assumption is made here that there won't be more than 1 figure on the same tile that the figures are dependent on.
                         --It is possible for more than 1 figure from the same player to be on the same tile through use of the magic portal, but not on the same feature.
                         --Therefore, I think the assumption is safe unless there is interference from the players
-                        table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+                        table.insert(removedFigures, {guid = object.getGUID(), winner = false})
                         allGameMessage({"MESSAGE_DRAGON_FIGURE_EAT_MESSAGE", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, NEUTRAL_COLOR)
                         removeDependentFigures(object)
                     else
@@ -1190,9 +1190,9 @@ function displayGoldButtons()
         if tileGridOccupied(newX, newZ) then
             local placeGoldButtonParam = {
                index = i, label = translate("BUTTON_LABEL_PLACE_GOLD"), click_function = 'placeGoldButton' .. i,
-               position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=0}, width = 800, height=600, font_size = 200, function_owner = nil
+               position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 0}, width = 800, height = 600, font_size = 200, function_owner = nil
             }
-            createNormalizedArbitraryButton({x=-newX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=newZ * TILE_SPACING - MIDDLE_OFFSET.z}, placeGoldButtonParam, false)
+            createNormalizedArbitraryButton({x = -newX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = newZ * TILE_SPACING - MIDDLE_OFFSET.z}, placeGoldButtonParam, false)
         end
     end
 end
@@ -1269,7 +1269,7 @@ function checkAddedTileFeatureExtensions()
     end
 
     local featureVisited = {}
-    for featureMapPosition=1, 12 do --roads and cities
+    for featureMapPosition = 1, 12 do --roads and cities
         local featureNum
         if isAbbey then
             local connectedFeatureMapPosition, connectedX, connectedZ = getConnectingFeatureMapPosition(lastPlacedTileX, lastPlacedTileZ, featureMapPosition, TILE_STANDARD_ROTATION)
@@ -1296,7 +1296,7 @@ function checkAddedTileFeatureExtensions()
                             if tradeGoodPile ~= nil then
                                 local params = {}
                                 params.position = {player_possession_areas[activePlayers[currentPlayer]].x + x, 2, player_possession_areas[activePlayers[currentPlayer]].z + z}
-                                params.rotation = {0,  player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0}
+                                params.rotation = {0, player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0}
                                 tradeGoodPile.takeObject(params)
                                 allGameMessage({"MESSAGE_TRADE_TOKEN_AWARD", {'{p1}', getPlayerOwnerName(activePlayers[currentPlayer])}, {'{s1}', specialFeature}}, player_color_tints[activePlayers[currentPlayer]])
                             else
@@ -1316,7 +1316,7 @@ function checkAddedTileFeatureExtensions()
         local x, z = rotateCoordinates(PLAYER_POSSESSION_POSITIONS['KnRBRobber'].x, PLAYER_POSSESSION_POSITIONS['KnRBRobber'].z, player_possession_areas[activePlayers[currentPlayer]].rotation)
         if awardToken ~= nil then
             awardToken.setPositionSmooth({player_possession_areas[activePlayers[currentPlayer]].x + x, 2, player_possession_areas[activePlayers[currentPlayer]].z + z})
-            awardToken.setRotationSmooth({0,  player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
+            awardToken.setRotationSmooth({0, player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
             awardToken.setDescription(longestRoad .. " tiles")
             allGameMessage({"MESSAGE_ROBBER_BARON_AWARD", {'{p1}', getPlayerOwnerName(activePlayers[currentPlayer])}, {'{n1}', longestRoad}}, player_color_tints[activePlayers[currentPlayer]])
         else
@@ -1330,7 +1330,7 @@ function checkAddedTileFeatureExtensions()
         local x, z = rotateCoordinates(PLAYER_POSSESSION_POSITIONS['KnRBKing'].x, PLAYER_POSSESSION_POSITIONS['KnRBKing'].z, player_possession_areas[activePlayers[currentPlayer]].rotation)
         if awardToken ~= nil then
             awardToken.setPositionSmooth({player_possession_areas[activePlayers[currentPlayer]].x + x, 2, player_possession_areas[activePlayers[currentPlayer]].z + z})
-            awardToken.setRotationSmooth({0,  player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
+            awardToken.setRotationSmooth({0, player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
             awardToken.setDescription(largestCity .. " tiles")
             allGameMessage({"MESSAGE_KING_AWARD", {'{p1}', getPlayerOwnerName(activePlayers[currentPlayer])}, {'{n1}', largestCity}}, player_color_tints[activePlayers[currentPlayer]])
         else
@@ -1345,18 +1345,18 @@ end
 function displayFigureButtons()
     local labelButtonParam = {
        index = 1, label = translate("BUTTON_LABEL_PROMPT_PLACE_FIGURE"), click_function = 'doNothing',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=1.8}, width = 0, height=0, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 1.8}, width = 0, height = 0, font_size = 200, function_owner = nil
     }
-    createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
+    createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
     local skipFigureButtonParam = {
        index = 2, label = translate("BUTTON_LABEL_SKIP_PLACING_FIGURE"), click_function = 'skipFigureButton',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=2.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 2.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
     }
-    createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
+    createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
     for _, knight in ipairs(seducedKnights) do
         local seduceKnightButtonParam = {
            index = 1, label = translate("BUTTON_LABEL_SEDUCE_KNIGHT"), click_function = 'seduceKnightButton',
-           position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1700, height=600, font_size = 200, function_owner = nil
+           position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1700, height = 600, font_size = 200, function_owner = nil
         }
         createNormalizedButton(getObjectFromGUID(knight), seduceKnightButtonParam, true)
     end
@@ -1366,7 +1366,7 @@ function displayFigureButtons()
             if tileGridOccupied(xIndex, zIndex) then
                 local retrieveAbbotButtonParam = {
                    index = 1, label = translate("BUTTON_LABEL_RETRIEVE_ABBOT"), click_function = 'retrieveAbbotButton',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1400, height=600, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1400, height = 600, font_size = 200, function_owner = nil
                 }
                 createNormalizedButton(obj, retrieveAbbotButtonParam, true)
                 currentPlayerAbbot = obj.getGUID()
@@ -1380,14 +1380,14 @@ end
 function displayPhantomButtons()
     local labelButtonParam = {
        index = 1, label = translate("BUTTON_LABEL_PROMPT_PLACE_PHANTOM"), click_function = 'doNothing',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=1.8}, width = 0, height=0, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 1.8}, width = 0, height = 0, font_size = 200, function_owner = nil
     }
-    createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
+    createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
     local skipFigureButtonParam = {
        index = 2, label = translate("BUTTON_LABEL_SKIP_PHANTOM"), click_function = 'skipFigureButton',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=2.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 2.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
     }
-    createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
+    createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
 end
 
 --creates a button, which is rotated according to the object's current rotation, so that the buttons always face up and towards the active player
@@ -1411,20 +1411,20 @@ function createNormalizedButton(obj, params, rotateToPlayer, customRotation)
         end
         x, z = rotateCoordinates(params.position.x, params.position.z, ((-playerRotation + 7) % 4) + 1)
     end
-    params.position = {x=x, y=params.position.y, z=z}
+    params.position = {x = x, y = params.position.y, z = z}
     local pos = obj.getPosition()
     pos.x = pos.x + params.position.x
     pos.y = pos.y + params.position.y
     pos.z = pos.z + params.position.z
     pos = obj.positionToLocal(pos)
-    params.position = {x=-pos.x, y=pos.y, z=pos.z}
-    params.scale = {x=1/obj.getScale().x / 2, y=1/obj.getScale().y, z=1/obj.getScale().z / 2}
+    params.position = {x = -pos.x, y = pos.y, z = pos.z}
+    params.scale = {x = 1/obj.getScale().x / 2, y = 1/obj.getScale().y, z = 1/obj.getScale().z / 2}
 
     local rotation = -obj.getRotation().y - (playerRotation * 90)
     --this method is currently bugged(?)
     --local rotation = (obj.getRotation().y * -1) + (Player[player].getPointerRotation())
     while rotation < 0 do rotation = rotation + 360 end
-    params.rotation = {x=obj.getRotation().x, y=rotation, z=-obj.getRotation().z}
+    params.rotation = {x = obj.getRotation().x, y = rotation, z = -obj.getRotation().z}
     obj.createButton(params)
 end
 
@@ -1442,15 +1442,15 @@ function createNormalizedArbitraryButton(pivot_point, params, rotateToPlayer)
         playerRotation = player_possession_areas[player].rotation
     end
     local x, z = rotateCoordinates(params.position.x, params.position.z, ((-playerRotation + 7) % 4) + 1)
-    --params.position = {x=x, y=params.position.y, z=z}
-    params.position = {x=x + pivot_point.x, y=params.position.y + pivot_point.y, z=z + pivot_point.z}
+    --params.position = {x = x, y = params.position.y, z = z}
+    params.position = {x = x + pivot_point.x, y = params.position.y + pivot_point.y, z = z + pivot_point.z}
 
     local rotation = -(playerRotation * 90)
     --this method is currently bugged(?)
     --local rotation = (obj.getRotation().y * -1) + (Player[player].getPointerRotation())
     while rotation < 0 do rotation = rotation + 360 end
-    params.rotation = {x=0, y=rotation, z=0}
-    params.scale = {x=0.5, y=1.0, z=0.5}
+    params.rotation = {x = 0, y = rotation, z = 0}
+    params.scale = {x = 0.5, y = 1.0, z = 0.5}
 
     getObjectFromGUID(BUTTON_ANCHOR_GUID).createButton(params)
 end
@@ -1458,15 +1458,15 @@ end
 function createNormalizedTileButton(pivot_point, params)
     local tileRotation = -lastFerryTile.rotation
     local x, z = rotateCoordinates(params.position.x, params.position.z, ((-tileRotation + 7) % 4) + 1)
-    --params.position = {x=x, y=params.position.y, z=z}
-    params.position = {x=x + pivot_point.x, y=params.position.y + pivot_point.y, z=z + pivot_point.z}
+    --params.position = {x = x, y = params.position.y, z = z}
+    params.position = {x = x + pivot_point.x, y = params.position.y + pivot_point.y, z = z + pivot_point.z}
 
     local rotation = -(tileRotation * 90)
     --this method is currently bugged(?)
     --local rotation = (obj.getRotation().y * -1) + (Player[player].getPointerRotation())
     while rotation < 0 do rotation = rotation + 360 end
-    params.rotation = {x=0, y=rotation, z=0}
-    params.scale = {x=0.5, y=1.0, z=0.5}
+    params.rotation = {x = 0, y = rotation, z = 0}
+    params.scale = {x = 0.5, y = 1.0, z = 0.5}
 
     getObjectFromGUID(BUTTON_ANCHOR_GUID).createButton(params)
 end
@@ -1486,7 +1486,7 @@ function seduceKnightButton(object, sPlayer)
         --although we later remove these buttons, there is a slight delay during the figure removal, so we remove them now
         clearArbitraryButtons()
 
-        table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+        table.insert(removedFigures, {guid = object.getGUID(), winner = false})
         if object.getVar('figureName') == 'Wagon' then
             allGameMessage({"MESSAGE_PRINCESS_SEDUCTION_WAGON", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, player_color_tints[object.getVar('owner')])
         else
@@ -1509,7 +1509,7 @@ function retrieveAbbotButton(object, sPlayer)
                 score = #traversedTileCoords
                 allGameMessage({"MESSAGE_ABBOT_RETRIEVE", {'{p1}', getPlayerOwnerName(object.getVar('owner'))}, {'{n1}', score}, {'{s1}', translate(nameOfFeature)}}, player_color_tints[object.getVar('owner')])
                 scorePoints(object.getVar('owner'), nameOfFeature, score)
-                table.insert(removedFigures, {guid=object.getGUID(), winner=true})
+                table.insert(removedFigures, {guid = object.getGUID(), winner = true})
                 object.setLock(false)
                 object.use_gravity = false
                 object.interactable = false
@@ -1517,7 +1517,7 @@ function retrieveAbbotButton(object, sPlayer)
                 object.setPositionSmooth({object.getPosition().x, object.getPosition().y + 2.5, object.getPosition().z}, false, false)
 
                 if showMarkers == 'Both' or showMarkers == 'Scoring' then
-                    Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                    Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
                 else
                     returnFigures()
                 end
@@ -1534,12 +1534,12 @@ function promptTowerCapture()
     if controlPanelSettings['TowersNerfTower'] then
         towerRange = numberActiveTowers - 1
     end
-    getObjectFromGUID(tileGrid[towerX][towerZ].tile_guid).highlightOn({1,0,0})
+    getObjectFromGUID(tileGrid[towerX][towerZ].tile_guid).highlightOn({1, 0, 0})
     if towerRange > 0 then
-        for i=1, towerRange do
+        for i = 1, towerRange do
             for side, sideDelta in pairs(SIDE_DELTA) do
                 if tileGridOccupied(towerX + sideDelta.x * i, towerZ + sideDelta.z * i) then
-                    getObjectFromGUID(tileGrid[towerX + sideDelta.x * i][towerZ + sideDelta.z * i].tile_guid).highlightOn({1,0,0})
+                    getObjectFromGUID(tileGrid[towerX + sideDelta.x * i][towerZ + sideDelta.z * i].tile_guid).highlightOn({1, 0, 0})
                 end
             end
         end
@@ -1550,10 +1550,10 @@ function promptTowerCapture()
         if table.contains(FOLLOWER_TYPES, obj.getVar('figureName')) then
             local xIndex, zIndex, _, _ = getFigureTileLocation(obj)
             if tileGridOccupied(xIndex, zIndex) then
-                if (xIndex == towerX and zIndex <= towerZ + towerRange and zIndex >= towerZ - towerRange) or (zIndex == towerZ and xIndex <= towerX + towerRange and xIndex >= towerX - towerRange) then
+                if (xIndex == towerX and zIndex < = towerZ + towerRange and zIndex > = towerZ - towerRange) or (zIndex == towerZ and xIndex < = towerX + towerRange and xIndex > = towerX - towerRange) then
                     local captureFollowerButtonParam = {
                        index = 1, label = translate({"BUTTON_LABEL_CAPTURE", {"{f1}", obj.getName()}}), click_function = 'captureFollowerButton',
-                       position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1100, height=600, font_size = 200, function_owner = nil
+                       position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1100, height = 600, font_size = 200, function_owner = nil
                     }
                     table.insert(capturableFollowers, obj.getGUID())
                     createNormalizedButton(obj, captureFollowerButtonParam, true)
@@ -1565,9 +1565,9 @@ function promptTowerCapture()
     if hasFollower then
         local skipCaptureButtonParam = {
            index = 2, label = translate("BUTTON_LABEL_SKIP_TOWER_CAPTURE"), click_function = 'skipCaptureButton',
-           position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=1.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+           position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 1.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
         }
-        createNormalizedArbitraryButton({x=-towerX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=towerZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipCaptureButtonParam, true)
+        createNormalizedArbitraryButton({x = -towerX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = towerZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipCaptureButtonParam, true)
     else
         return nextState('skip capture')
     end
@@ -1583,7 +1583,7 @@ function captureFollowerButton(object, sPlayer)
 
         removeDependentFigures(object)
         if object.getVar('owner') == activePlayers[currentPlayer] then
-            table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+            table.insert(removedFigures, {guid = object.getGUID(), winner = false})
             allGameMessage({"MESSAGE_TOWER_SELF_CAPTURE", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, player_color_tints[object.getVar('owner')])
             return nextState('return follower')
         else
@@ -1591,7 +1591,7 @@ function captureFollowerButton(object, sPlayer)
             x = player_possession_areas[activePlayers[currentPlayer]].x + x
             z = player_possession_areas[activePlayers[currentPlayer]].z + z
             local prisoners = getPrisoners()
-            for i=1, 6 do
+            for i = 1, 6 do
                 local prisonerInThisSpot = false
                 for _, prisoner in ipairs(prisoners[activePlayers[currentPlayer]]) do
                     local vPos = prisoner.getPosition()
@@ -1608,7 +1608,7 @@ function captureFollowerButton(object, sPlayer)
             end
             object.setLock(false)
             object.setPositionSmooth({x, 2, z})
-            object.setRotationSmooth({0,  player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
+            object.setRotationSmooth({0, player_possession_areas[activePlayers[currentPlayer]].rotation * -90, 0})
             allGameMessage({"MESSAGE_TOWER_CAPTURE", {'{c1}', object.getDescription()}, {'{f1}', object.getName() .. RGBToBracketedHex(NEUTRAL_COLOR)}, {'{p1}', RGBToBracketedHex(player_color_tints[activePlayers[currentPlayer]]) .. getPlayerOwnerName(activePlayers[currentPlayer])}}, player_color_tints[object.getVar('owner')])
             return nextState('capture follower')
         end
@@ -1628,7 +1628,7 @@ function createRansomButtons()
             if prisoner.getVar('owner') == activePlayers[currentPlayer] then
                 local ransomFollowerButtonParam = {
                    index = 1, label = translate({"BUTTON_LABEL_RANSOM", {"{f1}", prisoner.getName()}}), click_function = 'ransomFollowerButton',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1100, height=600, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1100, height = 600, font_size = 200, function_owner = nil
                 }
                 local rotation = player_possession_areas[player].rotation + 2
                 if rotation > 3 then rotation = rotation - 4 end
@@ -1649,7 +1649,7 @@ function ransomFollowerButton(object, sPlayer)
                 prisoner.clearButtons()
             end
         end
-        table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+        table.insert(removedFigures, {guid = object.getGUID(), winner = false})
         scorePoints(activePlayers[currentPlayer], 'Ransom', -3)
         if captor ~= nil then
             scorePoints(captor, 'Ransom', 3)
@@ -1691,19 +1691,19 @@ function exchangePrisoners()
     elseif #prisonersOfOtherPlayer == 1 then
         prisoners[activePlayers[currentPlayer]][1].clearButtons()
         prisonersOfOtherPlayer[1].clearButtons()
-        table.insert(removedFigures, {guid=prisoners[activePlayers[currentPlayer]][1].getGUID(), winner=false})
-        table.insert(removedFigures, {guid=prisonersOfOtherPlayer[1].getGUID(), winner=false})
+        table.insert(removedFigures, {guid = prisoners[activePlayers[currentPlayer]][1].getGUID(), winner = false})
+        table.insert(removedFigures, {guid = prisonersOfOtherPlayer[1].getGUID(), winner = false})
         allGameMessage({"MESSAGE_TOWER_EXCHANGE_FOLLOWER", {'{p1}', getPlayerOwnerName(prisoners[activePlayers[currentPlayer]][1].getVar('owner')) .. RGBToBracketedHex(NEUTRAL_COLOR)}, {'{p2}', RGBToBracketedHex(player_color_tints[activePlayers[currentPlayer]]) .. getPlayerOwnerName(activePlayers[currentPlayer]) .. RGBToBracketedHex(NEUTRAL_COLOR)}}, player_color_tints[prisoners[activePlayers[currentPlayer]][1].getVar('owner')])
         return nextState('return followers')
     else
         prisoners[activePlayers[currentPlayer]][1].clearButtons()
-        table.insert(removedFigures, {guid=prisoners[activePlayers[currentPlayer]][1].getGUID(), winner=false})
+        table.insert(removedFigures, {guid = prisoners[activePlayers[currentPlayer]][1].getGUID(), winner = false})
         allGameMessage({"MESSAGE_TOWER_EXCHANGE_PROMPT", {'{p1}', getPlayerOwnerName(activePlayers[currentPlayer])}, {'{p2}', getPlayerOwnerName(prisoners[activePlayers[currentPlayer]][1].getVar('owner'))}}, player_color_tints[activePlayers[currentPlayer]])
         for _, prisoner in ipairs(prisonersOfOtherPlayer) do
             prisoner.clearButtons()
             local returnFollowerButtonParam = {
                index = 1, label = translate({"BUTTON_LABEL_RETURN", {"{f1}", prisoner.getName()}}), click_function = 'returnFollowerButton',
-               position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1700, height=600, font_size = 200, function_owner = nil
+               position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1700, height = 600, font_size = 200, function_owner = nil
             }
             createNormalizedButton(prisoner, returnFollowerButtonParam, true)
         end
@@ -1718,7 +1718,7 @@ function returnFollowerButton(object, sPlayer)
             prisoner.clearButtons()
         end
 
-        table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+        table.insert(removedFigures, {guid = object.getGUID(), winner = false})
         allGameMessage({"MESSAGE_TOWER_EXCHANGE", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, player_color_tints[object.getVar('owner')])
         return nextState('return followers')
     end
@@ -1742,7 +1742,7 @@ function removeDependentFigures(object)
     if followersCount == 0 then
         for _, figure in ipairs(traversedSpecialFigures) do
             if (figure.getVar('figureName') == 'Pig' or figure.getVar('figureName') == 'Builder') and figure.getVar('owner') == object.getVar('owner') then
-                table.insert(removedFigures, {guid=figure.getGUID(), winner=false})
+                table.insert(removedFigures, {guid = figure.getGUID(), winner = false})
                 allGameMessage({"MESSAGE_DEPENDENT_FIGURE_REMOVED", {'{p1}', getPlayerOwnerName(figure.getVar('owner'))}, {'{f1}', figure.getName()}}, player_color_tints[object.getVar('owner')])
             end
         end
@@ -1819,11 +1819,11 @@ end
 function promptShepherd()
     local shepherdExpandButtonParam = {
        index = 1, label = translate("BUTTON_LABEL_EXPAND_FLOCK"), click_function = 'addSheepToFlockButton',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=1.5}, width = 1400, height=700, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 1.5}, width = 1400, height = 700, font_size = 200, function_owner = nil
     }
     local shepherdHerdButtonParam = {
        index = 2, label = translate("BUTTON_LABEL_HERD_FLOCK"), click_function = 'scoreFlockButton',
-       position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=2.3}, width = 1400, height=700, font_size = 200, function_owner = nil
+       position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 2.3}, width = 1400, height = 700, font_size = 200, function_owner = nil
     }
     local shepherd = getObjectFromGUID(shepherdAwaitingAction)
     createNormalizedButton(shepherd, shepherdExpandButtonParam, true)
@@ -1890,7 +1890,7 @@ function addSheepToFieldCoroutine()
                         if sheepTileBag ~= nil then
                             local params = {}
                             local x, z = getTileFeatureLocation(location, getObjectFromGUID(tileGrid[traversedTileCoord.x][traversedTileCoord.z].tile_guid), tileGrid[traversedTileCoord.x][traversedTileCoord.z].rotation)
-                            params.position = {x=(x * TILE_SPACING) + (traversedTileCoord.x * TILE_SPACING) - MIDDLE_OFFSET.x, y=1.5, z=(z * TILE_SPACING) + (traversedTileCoord.z * TILE_SPACING) - MIDDLE_OFFSET.z}
+                            params.position = {x = (x * TILE_SPACING) + (traversedTileCoord.x * TILE_SPACING) - MIDDLE_OFFSET.x, y = 1.5, z = (z * TILE_SPACING) + (traversedTileCoord.z * TILE_SPACING) - MIDDLE_OFFSET.z}
 
                             local direction = (3 + location + (tileGrid[traversedTileCoord.x][traversedTileCoord.z].rotation * 2)) % 8 + 5
                             params.position.x = params.position.x - (SIDE_DELTA[math.floor((direction - 3) / 2)].x * 0.1 * TILE_SPACING)
@@ -1906,9 +1906,9 @@ function addSheepToFieldCoroutine()
                                 coroutine.yield(0)
                             end
                             if newTile.getVar('tokenName') == "Wolf" then
-                                Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='scoreFlock', function_owner=nil, parameters={shepherd=shepherd}, delay=1.0})
+                                Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'scoreFlock', function_owner = nil, parameters = {shepherd = shepherd}, delay = 1.0})
                             else
-                                Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='progressState', function_owner=nil, parameters=nil, delay=1.0})
+                                Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'progressState', function_owner = nil, parameters = nil, delay = 1.0})
                             end
                             return
                         else
@@ -1966,7 +1966,7 @@ function addSheepToTileCoroutine()
                     local sheepTileBag = getObjectFromGUID(EXPANSION_BAGS['HnS'].contents['HnSSheepBag'].guid)
                     if sheepTileBag ~= nil then
                         local params = {}
-                        params.position = {x=(x * TILE_SPACING) + (shepherdTileXIndex * TILE_SPACING) - MIDDLE_OFFSET.x, y=1.5, z=(z * TILE_SPACING) + (shepherdTileZIndex * TILE_SPACING) - MIDDLE_OFFSET.z}
+                        params.position = {x = (x * TILE_SPACING) + (shepherdTileXIndex * TILE_SPACING) - MIDDLE_OFFSET.x, y = 1.5, z = (z * TILE_SPACING) + (shepherdTileZIndex * TILE_SPACING) - MIDDLE_OFFSET.z}
 
                         local direction = (3 + location + (tileGrid[shepherdTileXIndex][shepherdTileZIndex].rotation * 2)) % 8 + 5
                         params.position.x = params.position.x - (SIDE_DELTA[math.floor((direction - 3) / 2)].x * 0.1 * TILE_SPACING)
@@ -1982,9 +1982,9 @@ function addSheepToTileCoroutine()
                             coroutine.yield(0)
                         end
                         if newTile.getVar('tokenName') == "Wolf" then
-                            Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='scoreFlock', function_owner=nil, parameters={shepherd=shepherd}, delay=1.0})
+                            Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'scoreFlock', function_owner = nil, parameters = {shepherd = shepherd}, delay = 1.0})
                         else
-                            Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='progressState', function_owner=nil, parameters=nil, delay=1.0})
+                            Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'progressState', function_owner = nil, parameters = nil, delay = 1.0})
                         end
                         return
                     else
@@ -2016,9 +2016,9 @@ function addSheepToShepherd(shepherd)
             coroutine.yield(0)
         end
         if newTile.getVar('tokenName') == "Wolf" then
-            Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='scoreFlock', function_owner=nil, parameters={shepherd=shepherd}, delay=1.0})
+            Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'scoreFlock', function_owner = nil, parameters = {shepherd = shepherd}, delay = 1.0})
         else
-            Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='progressState', function_owner=nil, parameters=nil, delay=1.0})
+            Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'progressState', function_owner = nil, parameters = nil, delay = 1.0})
         end
     else
         allErrorMessage("MESSAGE_SHEPHERD_ERROR_NO_SHEEP_BAG_DRAWING")
@@ -2081,7 +2081,7 @@ function scoreFlockCoroutine()
             if figure.getVar('figureName') == 'Shepherd' then
                 local winner
                 if score > 0 then winner = true else winner = false end
-                table.insert(removedFigures, {guid=figure.getGUID(), winner=winner})
+                table.insert(removedFigures, {guid = figure.getGUID(), winner = winner})
                 if not hasWolf then
                     allGameMessage({"MESSAGE_SCORE_SHEPHERD", {'{p1}', getPlayerOwnerName(figure.getVar('owner'))}, {'{n1}', score}}, player_color_tints[figure.getVar('owner')])
                 else
@@ -2096,7 +2096,7 @@ function scoreFlockCoroutine()
             end
         end
         if showMarkers == 'Both' or showMarkers == 'Scoring' then
-            Timer.create({identifier=shepherd.getGUID() .. os.clock(), function_name='praiseShepherd', function_owner=nil, parameters=nil, delay=0.9})
+            Timer.create({identifier = shepherd.getGUID() .. os.clock(), function_name = 'praiseShepherd', function_owner = nil, parameters = nil, delay = 0.9})
         else
             returnShepherds()
         end
@@ -2124,7 +2124,7 @@ function praiseShepherdCoroutine()
     for _, figure in ipairs(removedFigures) do
         if figure.winner then
             hasWinner = true
-            getObjectFromGUID(figure.guid).addTorque({0,25,0}, 4)
+            getObjectFromGUID(figure.guid).addTorque({0, 25, 0}, 4)
         end
     end
     if hasWinner then
@@ -2154,7 +2154,7 @@ function praiseShepherdCoroutine()
             end
         end
     end
-    Timer.create({identifier=os.clock(), function_name='returnShepherds', function_owner=nil, parameters=nil, delay=FIGURE_PRAISE_DELAY})
+    Timer.create({identifier = os.clock(), function_name = 'returnShepherds', function_owner = nil, parameters = nil, delay = FIGURE_PRAISE_DELAY})
     return 1
 end
 
@@ -2186,7 +2186,7 @@ function returnShepherdsCoroutine()
             local x, z = rotateCoordinatesDegrees(figurePositions[figure_obj.getVar('owner')][figure_obj.getGUID()].x, figurePositions[figure_obj.getVar('owner')][figure_obj.getGUID()].z, -figurePad.getRotation().y)
             figure_obj.setLock(false)
             figure_obj.setPositionSmooth({x = figurePad.getPosition().x + x, y = figurePad.getPosition().y + 1, z = figurePad.getPosition().z + z}, false, false)
-            figure_obj.setRotationSmooth({x=0, y=figurePad.getRotation().y, z=0})
+            figure_obj.setRotationSmooth({x = 0, y = figurePad.getRotation().y, z = 0})
         else
             allErrorMessage("Warning: " .. figure_obj.getName() .. " doesn't have a home and must be returned manually", activePlayers[currentPlayer])
         end
@@ -2206,14 +2206,14 @@ function checkFlierDestination()
             if lastPlacedTileX + flierOffset.x == dragonXIndex and
                lastPlacedTileZ + flierOffset.z == dragonZIndex then
                 allGameMessage({"MESSAGE_FLIER_LANDED_ON_DRAGON"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
-                table.insert(removedFigures, {guid=flier, winner=false})
+                table.insert(removedFigures, {guid = flier, winner = false})
                 return nextState('feature unavailable')
             end
         end
         resetTraversal()
         local destinationTile = getObjectFromGUID(tileGrid[lastPlacedTileX + flierOffset.x][lastPlacedTileZ + flierOffset.z].tile_guid)
         local hasIncompleteFeature = false
-        for i=1, 12 do
+        for i = 1, 12 do
             if getTileFeatureName(destinationTile, i) == 'City' or getTileFeatureName(destinationTile, i) == 'Road' then --fields are not valid destinations
                 if getObjectFromGUID(flier).getVar('figureName') ~= 'Mayor' or getTileFeatureName(destinationTile, i) == 'City' then
                     if getFeatureComponents(lastPlacedTileX + flierOffset.x, lastPlacedTileZ + flierOffset.z, i, 1, false) > 0 then
@@ -2244,7 +2244,7 @@ function checkFlierDestination()
         allGameMessage({"MESSAGE_FLIER_NO_TILE"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
     end
 
-    table.insert(removedFigures, {guid=flier, winner=false})
+    table.insert(removedFigures, {guid = flier, winner = false})
     return nextState('feature unavailable')
 end
 
@@ -2288,8 +2288,8 @@ function promptMovingFromCoC()
                                 table.insert(barnFeatureNumbers, featureNum)
                             else
                                 local nameOfFeature = featureList[featureNum].nameOfFeature
-                                if string.sub(nameOfFeature,1,8) == 'Quarter-' and nameOfFeature ~= countnameOfFeature then
-                                    local quarter = string.sub(nameOfFeature,9)
+                                if string.sub(nameOfFeature, 1, 8) == 'Quarter-' and nameOfFeature ~= countnameOfFeature then
+                                    local quarter = string.sub(nameOfFeature, 9)
                                     if carcassonneFigures[obj.getVar('owner')] == nil then
                                         carcassonneFigures[obj.getVar('owner')] = {}
                                     end
@@ -2334,7 +2334,7 @@ function promptMovingFromCoC()
                 local tileRotation = tileGrid[lastPlacedTileX][lastPlacedTileZ].rotation
                 if newTile.getTable('sides')[1] ~= 'Abbey' then
                     local specialFeatures = newTile.getTable('specialFeatures')
-                    for tilePosition=1, 12 do --roads and cities
+                    for tilePosition = 1, 12 do --roads and cities
                         local featureMapPosition = tilePositionToFeatureMapPosition(tilePosition, tileRotation)
                         local featureNum = getFeatureNumAt(lastPlacedTileX, lastPlacedTileZ, featureMapPosition)
                         if featureNum ~= nil and featureList[featureNum] ~= nil then
@@ -2355,7 +2355,7 @@ function promptMovingFromCoC()
                         end
                     end
                 else --if an abbey was used, then we cannot simply traverse it's features like above in order to find completed features. instead, we traverse the surrounding features
-                    for i=1, 12 do --roads and cities
+                    for i = 1, 12 do --roads and cities
                         local tile = newTile
                         local rotation = tileGrid[lastPlacedTileX][lastPlacedTileZ].rotation
                         local direction = (3 + i + rotation) % 4 + 1
@@ -2407,7 +2407,7 @@ function promptMovingFromCoC()
                 for follower_guid, quarter in pairs(carcassonneFigures[activePlayers[currentMiniTurn]]) do
                     if quarter == 'Blacksmith' then
                         hasAnything = true
-                        getObjectFromGUID(follower_guid).highlightOn({1,1,1})
+                        getObjectFromGUID(follower_guid).highlightOn({1, 1, 1})
                         getObjectFromGUID(follower_guid).setLock(false)
                     end
                 end
@@ -2417,7 +2417,7 @@ function promptMovingFromCoC()
                 for follower_guid, quarter in pairs(carcassonneFigures[activePlayers[currentMiniTurn]]) do
                     if quarter == 'Castle' then
                         hasAnything = true
-                        getObjectFromGUID(follower_guid).highlightOn({1,1,1})
+                        getObjectFromGUID(follower_guid).highlightOn({1, 1, 1})
                         getObjectFromGUID(follower_guid).setLock(false)
                     end
                 end
@@ -2427,7 +2427,7 @@ function promptMovingFromCoC()
                 for follower_guid, quarter in pairs(carcassonneFigures[activePlayers[currentMiniTurn]]) do
                     if quarter == 'Cathedral' then
                         hasAnything = true
-                        getObjectFromGUID(follower_guid).highlightOn({1,1,1})
+                        getObjectFromGUID(follower_guid).highlightOn({1, 1, 1})
                         getObjectFromGUID(follower_guid).setLock(false)
                     end
                 end
@@ -2437,7 +2437,7 @@ function promptMovingFromCoC()
                 for follower_guid, quarter in pairs(carcassonneFigures[activePlayers[currentMiniTurn]]) do
                     if quarter == 'Market' then
                         hasAnything = true
-                        getObjectFromGUID(follower_guid).highlightOn({1,1,1})
+                        getObjectFromGUID(follower_guid).highlightOn({1, 1, 1})
                         getObjectFromGUID(follower_guid).setLock(false)
                     end
                 end
@@ -2450,16 +2450,16 @@ function promptMovingFromCoC()
                 end
                 local labelButtonParam = {
                    index = 1, label = translate("BUTTON_LABEL_PROMPT_PLACE_FIGURE"), click_function = 'doNothing',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=3.8}, width = 0, height=0, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 3.8}, width = 0, height = 0, font_size = 200, function_owner = nil
                 }
                 local skipFigureButtonParam = {
                    index = 2, label = translate("BUTTON_LABEL_SKIP_PLACING_FIGURE"), click_function = 'skipCoCButton',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=4.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 4.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
                 }
                 local CoCMiddlePosition = getObjectFromGUID(EXPANSION_BAGS['CoC'].contents['CoCStartingTiles'].contents[6].guid).getPosition()
                 CoCMiddlePosition.x = CoCMiddlePosition.x + TILE_SPACING / 2
-                createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, labelButtonParam, true)
-                createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, skipFigureButtonParam, true)
+                createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, labelButtonParam, true)
+                createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, skipFigureButtonParam, true)
                 return
             else
                 carcassonneFigures[activePlayers[currentMiniTurn]] = nil
@@ -2664,8 +2664,8 @@ function scoreFeatures()
                                     challengerTile = 'Shrine'
                                     challengedTile = 'Cloister'
                                 end
-                                for x=-1, 1 do
-                                    for z=-1, 1 do
+                                for x = -1, 1 do
+                                    for z = -1, 1 do
                                         if not (x == 0 and z == 0) and tileGridOccupied(xIndex + x, zIndex + z) then
                                             local specialFeatures = getObjectFromGUID(tileGrid[xIndex + x][zIndex + z].tile_guid).getTable('specialFeatures')
                                             if specialFeatures ~= nil then
@@ -2674,8 +2674,8 @@ function scoreFeatures()
                                                     if adjacentFeature == 'Abbey' then adjacentFeature = 'Cloister' end
                                                     if adjacentFeature == challengedTile then
                                                         local numTiles = 0
-                                                        for nested_x=-1, 1 do
-                                                            for nested_z=-1, 1 do
+                                                        for nested_x = -1, 1 do
+                                                            for nested_z = -1, 1 do
                                                                 if tileGridOccupied(xIndex + x + nested_x, zIndex + z + nested_z) then
                                                                     numTiles = numTiles + 1
                                                                 end
@@ -2694,7 +2694,7 @@ function scoreFeatures()
                                                                             object.interactable = false
                                                                             --raise the follower in the air
                                                                             object.setPositionSmooth({object.getPosition().x, object.getPosition().y + 2.5, object.getPosition().z}, false, false)
-                                                                            table.insert(removedFigures, {guid=object.getGUID(), winner=false})
+                                                                            table.insert(removedFigures, {guid = object.getGUID(), winner = false})
                                                                             allGameMessage({"MESSAGE_SHRINE_LOSE", {'{c1}', object.getDescription()}, {'{f1}', object.getName()}}, player_color_tints[object.getVar('owner')])
                                                                         end
                                                                     end
@@ -2715,9 +2715,9 @@ function scoreFeatures()
                             score = featureList[featureNum].numTiles
                         end
                         for player, value in pairs(followerCounts) do
-                            if nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature,1,8) ~= 'Quarter-' and string.sub(nameOfFeature,1,6) ~= 'Crown-' and nameOfFeature ~= 'Tower Foundation' and string.sub(nameOfFeature,1,6) ~= 'Flier' then
+                            if nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature, 1, 8) ~= 'Quarter-' and string.sub(nameOfFeature, 1, 6) ~= 'Crown-' and nameOfFeature ~= 'Tower Foundation' and string.sub(nameOfFeature, 1, 6) ~= 'Flier' then
                                 if gameover or featureComplete or (nameOfFeature == 'Field' and hasBarn and #featureFollowers > 0) or (gameover and hasBarn and #featureFollowers == 0) then
-                                    if (topWeight > 0 and value >= topWeight) then
+                                    if (topWeight > 0 and value > = topWeight) then
                                         local playerScore = score
                                         if nameOfFeature == 'Field' then
                                             local scoreMultiplier = 3
@@ -2760,7 +2760,7 @@ function scoreFeatures()
                                 end
                             end
                         end
-                        if nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature,1,8) ~= 'Quarter-' and string.sub(nameOfFeature,1,6) ~= 'Crown-' and nameOfFeature ~= 'Tower Foundation' then
+                        if nameOfFeature ~= 'Carcassonne' and string.sub(nameOfFeature, 1, 8) ~= 'Quarter-' and string.sub(nameOfFeature, 1, 6) ~= 'Crown-' and nameOfFeature ~= 'Tower Foundation' then
                             if gameover or featureComplete or (nameOfFeature == 'Field' and hasBarn) then
                                 --The following is only used to check for traversedGoldBars
                                 getFeatureComponents(xIndex, zIndex, closestTilePosition, 2, true)
@@ -2776,7 +2776,7 @@ function scoreFeatures()
                                         wagonFeatures[follower.getVar('owner')] = featureNum
                                     end
                                     local winner = false
-                                    if topWeight > 0 and followerCounts[follower.getVar('owner')] >= topWeight and score > 0 then winner = true end
+                                    if topWeight > 0 and followerCounts[follower.getVar('owner')] > = topWeight and score > 0 then winner = true end
                                     if winner and nameOfFeature ~= 'Field' and #traversedGoldBars > 0 then
                                         if scoringRewards['Gold'] == nil then scoringRewards['Gold'] = {} end
                                         for _, gold in ipairs(traversedGoldBars) do
@@ -2786,7 +2786,7 @@ function scoreFeatures()
                                             end
                                         end
                                     end
-                                    table.insert(removedFigures, {guid=follower.getGUID(), winner=winner})
+                                    table.insert(removedFigures, {guid = follower.getGUID(), winner = winner})
                                     follower.setLock(false)
                                     follower.use_gravity = false
                                     follower.interactable = false
@@ -2799,8 +2799,8 @@ function scoreFeatures()
                                     if figure.getVar('figureName') ~= 'Shepherd' and (figure.getVar('figureName') ~= 'Barn' or (figure.getVar('figureName') == 'Barn' and #featureFollowers == 0 and gameover)) then
                                         local winner = false
                                         --builder not involved in scoring, so shouldn't be praised
-                                        if figure.getVar('figureName') ~= 'Builder' and topWeight > 0 and followerCounts[figure.getVar('owner')] >= topWeight and score > 0 then winner = true end
-                                        table.insert(removedFigures, {guid=figure.getGUID(), winner=winner})
+                                        if figure.getVar('figureName') ~= 'Builder' and topWeight > 0 and followerCounts[figure.getVar('owner')] > = topWeight and score > 0 then winner = true end
+                                        table.insert(removedFigures, {guid = figure.getGUID(), winner = winner})
                                         figure.setLock(false)
                                         figure.use_gravity = false
                                         figure.interactable = false
@@ -2813,7 +2813,7 @@ function scoreFeatures()
                                         praiseFiguresCameraFocus(false)
                                     end
                                     getFeatureComponents(xIndex, zIndex, closestTilePosition, 2, true)
-                                    Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                                    Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
                                 else
                                     returnFigures()
                                 end
@@ -2863,7 +2863,7 @@ function scoreFeatures()
                         local playerPossessions = getObjectFromGUID(playerPossessionScriptingZones[player]).getObjects()
                         for _, obj in ipairs(playerPossessions) do
                             if obj.getVar('tokenName') == tokenType then
-                                table.insert(removedFigures, {guid=obj.getGUID(), winner=winner})
+                                table.insert(removedFigures, {guid = obj.getGUID(), winner = winner})
                                 obj.setLock(false)
                                 obj.use_gravity = false
                                 obj.interactable = false
@@ -2879,7 +2879,7 @@ function scoreFeatures()
                     traversedFeaturePositions = {}
                     if showMarkers == 'Both' or showMarkers == 'Scoring' then
                         praiseFiguresCameraFocus(true)
-                        Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                        Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
                     else
                         returnFigures()
                     end
@@ -2897,7 +2897,7 @@ function scoreFeatures()
                         local quantity = obj.getQuantity()
                         if quantity == -1 then quantity = 1 end
                         playerNumGold = playerNumGold + quantity
-                        table.insert(removedFigures, {guid=obj.getGUID(), winner=true})
+                        table.insert(removedFigures, {guid = obj.getGUID(), winner = true})
                         obj.setLock(false)
                         obj.use_gravity = false
                         obj.interactable = false
@@ -2909,7 +2909,7 @@ function scoreFeatures()
                     local goldPoints
                     local goldMultiplier
                     if playerNumGold > 9 then
-                        goldMultiplier =  4
+                        goldMultiplier = 4
                     elseif playerNumGold > 6 then
                         goldMultiplier = 3
                     elseif playerNumGold > 3 then
@@ -2923,7 +2923,7 @@ function scoreFeatures()
 
                     if showMarkers == 'Both' or showMarkers == 'Scoring' then
                         praiseFiguresCameraFocus(true)
-                        Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                        Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
                     else
                         returnFigures()
                     end
@@ -2939,13 +2939,13 @@ function scoreFeatures()
             for x, tileColumn in pairs(tileGrid) do
                 for z, tileLocation in pairs(tileColumn) do
                     local tile = getObjectFromGUID(tileLocation.tile_guid)
-                    for i=1, 12 do --roads and cities
+                    for i = 1, 12 do --roads and cities
                         if traversedGrid[x] == nil or traversedGrid[x][z] == nil or traversedGrid[x][z][i] == nil or traversedGrid[x][z][i] > 1 then
                             if controlPanelSettings['KnRBRobber'] and i < 5 and getTileFeatureName(tile, i) == 'Road' then
                                 if getFeatureComponents(x, z, i, 1, false) == 0 then
                                     numRoads = numRoads + 1
                                 end
-                            elseif controlPanelSettings['KnRBKing'] and i >= 5 and (getTileFeatureName(tile, i) == 'City' or getTileFeatureName(tile, i) == 'Carcassonne') then
+                            elseif controlPanelSettings['KnRBKing'] and i > = 5 and (getTileFeatureName(tile, i) == 'City' or getTileFeatureName(tile, i) == 'Carcassonne') then
                                 if getFeatureComponents(x, z, i, 1, false) == 0 then
                                     numCities = numCities + 1
                                 end
@@ -2967,7 +2967,7 @@ function scoreFeatures()
                     if (obj.getGUID() == EXPANSION_BAGS['KnRB'].contents['KnRBKing'].guid and controlPanelSettings['KnRBKing']) or (obj.getGUID() == EXPANSION_BAGS['KnRB'].contents['KnRBRobber'].guid and controlPanelSettings['KnRBRobber']) then
                         allGameMessage({"MESSAGE_SCORE_KING_OR_ROBBER_BARON", {'{p1}', getPlayerOwnerName(player)}, {'{n1}', score}, {'{f1}', obj.getName()}}, player_color_tints[player])
                         scorePoints(player, 'King/Robber Tokens', score)
-                        table.insert(removedFigures, {guid=obj.getGUID(), winner=true})
+                        table.insert(removedFigures, {guid = obj.getGUID(), winner = true})
                         obj.setLock(false)
                         obj.use_gravity = false
                         obj.interactable = false
@@ -2977,7 +2977,7 @@ function scoreFeatures()
 
                         if showMarkers == 'Both' or showMarkers == 'Scoring' then
                             praiseFiguresCameraFocus(false)
-                            Timer.create({identifier=os.clock(), function_name='praiseFigures', function_owner=nil, parameters=nil, delay=0.9})
+                            Timer.create({identifier = os.clock(), function_name = 'praiseFigures', function_owner = nil, parameters = nil, delay = 0.9})
                         else
                             returnFigures()
                         end
@@ -3135,7 +3135,7 @@ function promptGoldChoice()
     for _, gold in ipairs(eligibleGold) do
         local goldButtonParam = {
            index = 1, label = translate("BUTTON_LABEL_TAKE_GOLD"), click_function = 'takeGoldButton',
-           position = {x=0, y=FLOATING_BUTTON_HEIGHT_LOW, z=1.0}, width = 1100, height=600, font_size = 200, function_owner = nil
+           position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 1.0}, width = 1100, height = 600, font_size = 200, function_owner = nil
         }
         createNormalizedButton(getObjectFromGUID(gold), goldButtonParam, true)
     end
@@ -3174,7 +3174,7 @@ function giveGold(gold, player_color)
     x = x + PLAYER_POSSESSION_SPACING * tempGoldCounts[player_color]
 
     getObjectFromGUID(gold).setPositionSmooth({x, 2, z})
-    getObjectFromGUID(gold).setRotationSmooth({0,  player_possession_areas[activePlayers[currentMiniTurn]].rotation * -90 + 90, 0})
+    getObjectFromGUID(gold).setRotationSmooth({0, player_possession_areas[activePlayers[currentMiniTurn]].rotation * -90 + 90, 0})
 
     tempGoldCounts[player_color] = tempGoldCounts[player_color] + 1
     scoringRewards['Gold'][gold] = nil
@@ -3195,14 +3195,14 @@ function replaceFinishedWagons()
                 allGameMessage({"MESSAGE_WAGON_PROMPT", {'{p1}', getPlayerOwnerName(activePlayers[currentMiniTurn])}}, player_color_tints[activePlayers[currentMiniTurn]], activePlayers[currentMiniTurn])
                 local labelButtonParam = {
                    index = 1, label = translate("BUTTON_LABEL_PROMPT_REPLACE_WAGON"), click_function = 'doNothing',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=1.8}, width = 0, height=0, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 1.8}, width = 0, height = 0, font_size = 200, function_owner = nil
                 }
                 local skipFigureButtonParam = {
                    index = 2, label = translate("BUTTON_LABEL_SKIP_WAGON"), click_function = 'skipWagonButton',
-                   position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=2.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+                   position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 2.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
                 }
-                createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
-                createNormalizedArbitraryButton({x=-lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y=TABLE_SURFACE_Y + TILE_THICKNESS / 2, z=lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
+                createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, labelButtonParam, true)
+                createNormalizedArbitraryButton({x = -lastPlacedTileX * TILE_SPACING + MIDDLE_OFFSET.x, y = TABLE_SURFACE_Y + TILE_THICKNESS / 2, z = lastPlacedTileZ * TILE_SPACING - MIDDLE_OFFSET.z}, skipFigureButtonParam, true)
                 return
             else
                 wagonFeatures[activePlayers[currentMiniTurn]] = nil
@@ -3227,16 +3227,16 @@ function promptMovingToCarcassonne()
             allGameMessage({"MESSAGE_COC_TO_CITY_PROMPT", {'{p1}', getPlayerOwnerName(activePlayers[currentPlayer])}}, player_color_tints[activePlayers[currentPlayer]], activePlayers[currentPlayer])
             local labelButtonParam = {
                index = 1, label = translate("BUTTON_LABEL_PROMPT_COC"), click_function = 'doNothing',
-               position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=3.8}, width = 0, height=0, font_size = 200, function_owner = nil
+               position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 3.8}, width = 0, height = 0, font_size = 200, function_owner = nil
             }
             local skipFigureButtonParam = {
                index = 2, label = translate("BUTTON_LABEL_SKIP_PLACING_FIGURE"), click_function = 'skipFigureButton',
-               position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=4.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+               position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 4.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
             }
             local CoCMiddlePosition = getObjectFromGUID(EXPANSION_BAGS['CoC'].contents['CoCStartingTiles'].contents[6].guid).getPosition()
             CoCMiddlePosition.x = CoCMiddlePosition.x + TILE_SPACING / 2
-            createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, labelButtonParam, true)
-            createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, skipFigureButtonParam, true)
+            createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, labelButtonParam, true)
+            createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, skipFigureButtonParam, true)
             return
         end
     end
@@ -3249,16 +3249,16 @@ function promptMovingCount()
         getObjectFromGUID(EXPANSION_BAGS['CoC'].contents['CoCCount'].guid).setLock(false)
         local labelButtonParam = {
            index = 1, label = translate("BUTTON_LABEL_PROMPT_MOVE_COUNT"), click_function = 'doNothing',
-           position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=3.8}, width = 0, height=0, font_size = 200, function_owner = nil
+           position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 3.8}, width = 0, height = 0, font_size = 200, function_owner = nil
         }
         local skipFigureButtonParam = {
            index = 2, label = translate("BUTTON_LABEL_SKIP_COUNT"), click_function = 'skipFigureButton',
-           position = {x=0, y=FLOATING_BUTTON_HEIGHT, z=4.5}, width = 1400, height=600, font_size = 200, function_owner = nil
+           position = {x = 0, y = FLOATING_BUTTON_HEIGHT, z = 4.5}, width = 1400, height = 600, font_size = 200, function_owner = nil
         }
         local CoCMiddlePosition = getObjectFromGUID(EXPANSION_BAGS['CoC'].contents['CoCStartingTiles'].contents[6].guid).getPosition()
         CoCMiddlePosition.x = CoCMiddlePosition.x + TILE_SPACING / 2
-        createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, labelButtonParam, true)
-        createNormalizedArbitraryButton({x=-CoCMiddlePosition.x, y=CoCMiddlePosition.y, z=-CoCMiddlePosition.z}, skipFigureButtonParam, true)
+        createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, labelButtonParam, true)
+        createNormalizedArbitraryButton({x = -CoCMiddlePosition.x, y = CoCMiddlePosition.y, z = -CoCMiddlePosition.z}, skipFigureButtonParam, true)
         return
     end
     return nextState('not eligible')
@@ -3273,14 +3273,14 @@ function hasAvailableWagonFeature(wagonFeatureNum)
         if featureList[linkedFeatureNum] ~= nil then
             if table.contains(CLOISTER_FEATURES, featureList[linkedFeatureNum].nameOfFeature) then
                 local numOpenings = 8
-                for x=-1, 1 do
-                    for z=-1, 1 do
+                for x = -1, 1 do
+                    for z = -1, 1 do
                         if not (x == 0 and z == 0) and tileGridOccupied(featureList[linkedFeatureNum].featureLocation.x + x, featureList[linkedFeatureNum].featureLocation.z + z) then
                             numOpenings = numOpenings - 1
                         end
                     end
                 end
-                if numOpenings <= 0 then
+                if numOpenings < = 0 then
                     linkedRoadFeatures[linkedFeatureNum] = nil
                 end
             elseif featureList[linkedFeatureNum].numOpenings == 0 then
@@ -3354,7 +3354,7 @@ function praiseFiguresCameraFocus(onlyWinners)
         camera_position.z = camera_position.z / num_winners
     end
     for _, player in ipairs(activePlayers) do
-        if getPlayerOwner(player):sub(1,2) ~= 'AI' and Player[getPlayerOwner(player)].seated then
+        if getPlayerOwner(player):sub(1, 2) ~= 'AI' and Player[getPlayerOwner(player)].seated then
             --getPointerRotation gives the player's current yaw (though +180 degrees). Use this to keep the yaw steady.
             local camera_yaw = Player[getPlayerOwner(player)].getPointerRotation() + 180
             if camera_yaw > 360 then camera_yaw = camera_yaw - 360 end
@@ -3390,7 +3390,7 @@ function praiseFiguresCoroutine()
     for _, figure in ipairs(removedFigures) do
         if figure.winner then
             hasWinner = true
-            getObjectFromGUID(figure.guid).addTorque({0,25,0}, 4)
+            getObjectFromGUID(figure.guid).addTorque({0, 25, 0}, 4)
         end
     end
     if hasWinner then
@@ -3422,7 +3422,7 @@ function praiseFiguresCoroutine()
             end
         end
     end
-    Timer.create({identifier=os.clock(), function_name='returnFigures', function_owner=nil, parameters=nil, delay=FIGURE_PRAISE_DELAY})
+    Timer.create({identifier = os.clock(), function_name = 'returnFigures', function_owner = nil, parameters = nil, delay = FIGURE_PRAISE_DELAY})
     return 1
 end
 
@@ -3493,7 +3493,7 @@ function returnFiguresCoroutine()
                 local x, z = rotateCoordinatesDegrees(figurePositions[figure_obj.getVar('owner')][figure_obj.getGUID()].x, figurePositions[figure_obj.getVar('owner')][figure_obj.getGUID()].z, -figurePad.getRotation().y)
                 figure_obj.setLock(false)
                 figure_obj.setPositionSmooth({x = figurePad.getPosition().x + x, y = figurePad.getPosition().y + 1, z = figurePad.getPosition().z + z}, false, false)
-                figure_obj.setRotationSmooth({x=0, y=figurePad.getRotation().y, z=0})
+                figure_obj.setRotationSmooth({x = 0, y = figurePad.getRotation().y, z = 0})
             else
                 allErrorMessage("Warning: " .. figure_obj.getName() .. " doesn't have a home and must be returned manually", activePlayers[currentPlayer])
             end
@@ -3534,8 +3534,8 @@ function startAnimation(animation)
                     animation_finished = true
                 end
                 local x, z = rotateCoordinatesDegrees(wheelPigStartingOffset.x, wheelPigStartingOffset.z, -degrees_rotated)
-                pig.setPosition({x=x + wheelCenterPosition.x, y=startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].position.y, z=z + wheelCenterPosition.z})
-                pig.setRotation({x=startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].rotation.x, y=startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].rotation.y, z=degrees_rotated})
+                pig.setPosition({x = x + wheelCenterPosition.x, y = startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].position.y, z = z + wheelCenterPosition.z})
+                pig.setRotation({x = startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].rotation.x, y = startingTileSettings['StartingTileWoF']['WoF']['WoFPig'].rotation.y, z = degrees_rotated})
             end
             coroutine.yield()
         end
@@ -3557,7 +3557,7 @@ function getWheelCenterPosition()
     end
     x = x / 4
     z = z / 4
-    return {x=x, z=z}
+    return {x = x, z = z}
 end
 
 function pigIsEnabled()
@@ -3599,7 +3599,7 @@ function findClosestTilePosition(xIndex, zIndex, xPosition, zPosition)
     local closestDistance = 999 --presumably every position should be closer than this
 
     local ignoredFeatures = tileGrid[xIndex][zIndex].ignoredFeatures
-    for a = 0, 1 do -- a==0 is for quadrants, a==1 is for octants
+    for a = 0, 1 do -- a == 0 is for quadrants, a == 1 is for octants
         for side = 1, 4 do
             for j = 0, a do -- should do 1 loop for quadrants, 2 loops for octants
                 if ignoredFeatures == nil or not table.contains(ignoredFeatures, position) then
@@ -3644,7 +3644,7 @@ function findClosestPosition(xIndex, zIndex, xPosition, zPosition)
     local closestDistance = 999 --presumably every position should be closer than this
 
     local ignoredFeatures = tileGrid[xIndex][zIndex].ignoredFeatures
-    for a = 0, 1 do -- a==0 is for quadrants, a==1 is for octants
+    for a = 0, 1 do -- a == 0 is for quadrants, a == 1 is for octants
         for side = 1, 4 do
             for j = 0, a do -- should do 1 loop for quadrants, 2 loops for octants
                 if ignoredFeatures == nil or not table.contains(ignoredFeatures, position) then
