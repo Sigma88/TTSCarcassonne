@@ -3750,17 +3750,3 @@ function getTileFeatureName(tile, position)
     end
     return nameOfFeature
 end
-
-function getLinkedQuadrants(tile)
-    if tile ~= nil then
-        if tile.guid ~= nil then
-            if FerriesLinkedQuadrants ~= nil then
-                local t = FerriesLinkedQuadrants[tile.guid]
-                if t ~= nil then
-                    return t
-                end
-            end
-        end
-    end
-    return tile.getTable('linkedQuadrants')
-end
