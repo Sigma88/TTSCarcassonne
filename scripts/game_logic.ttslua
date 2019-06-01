@@ -1175,6 +1175,7 @@ function placeFerryOn(link)
     if FerriesLinkedQuadrants ~= nil and lastFerryTile ~= nil then
         local tile = getObjectFromGUID(lastFerryTile.tile_guid)
         FerriesLinkedQuadrants[tile.guid] = link
+        removeTile(lastFerryPos.x, lastFerryPos.z, tile)
         addTile(lastFerryPos.x, lastFerryPos.z, tile, lastFerryTile.rotation, false)
         addFerryToTile(tile, link[1])
     end
