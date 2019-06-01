@@ -650,6 +650,21 @@ function removeTile(xIndex, zIndex, removedTile)
     AITileRemoved(xIndex, zIndex, removedTile)
 end
 
+--Gets the 'linkedQuadrants' setting from the tile
+function getLinkedQuadrants(tile)
+    if tile ~= nil then
+        if tile.guid ~= nil then
+            if FerriesLinkedQuadrants ~= nil then
+                local t = FerriesLinkedQuadrants[tile.guid]
+                if t ~= nil then
+                    return t
+                end
+            end
+        end
+    end
+    return tile.getTable('linkedQuadrants')
+end
+
 --Get the feature at the specified position
 --Also takes into account features that have no "middle" (ie. fields and cities)
 --Will return nil if there is still no feature at the given position (can happen if the feature is on the ignore list or both sides are not linked)
