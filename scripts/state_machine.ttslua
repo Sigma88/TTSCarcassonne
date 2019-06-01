@@ -126,9 +126,14 @@ stateMachine = {
     },
     ['post figure events'] = {
         ['has lake'] = 'post figure events - place ferry',
+        ['move ferry'] = 'post figure events - move ferry',
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - place ferry'] = {
+        ['move ferry'] = 'post figure events - move ferry',
+        ['next'] = 'post figure events - phantom'
+    },
+    ['post figure events - move ferry'] = {
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - phantom'] = {
@@ -399,14 +404,20 @@ function playerStateHandler()
         clearFigureOptions()
         seducedKnights = {}
         currentPlayerAbbot = nil
-        if turnState == 'post figure events' and checkTileForLake() then
-            lastFerryTile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
-            lastFerryPos = {x = lastPlacedTileX, z = lastPlacedTileZ}
-            return nextState('has lake')
+        if turnState == 'post figure events' then
+            if checkTileForLake() then
+                lastFerryTile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
+                lastFerryPos = {x = lastPlacedTileX, z = lastPlacedTileZ}
+                return nextState('has lake')
+            elseif checkMoveFerry() then
+                return nextState('move ferry')
+            end
         end
         return nextState('next')
     elseif turnState == 'post figure events - place ferry' then
         gameNotification({"MESSAGE_LAKE_PLACE_FERRY_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
+        return displayFerryButtons()
+    elseif turnState == 'post figure events - move ferry' then
         return displayFerryButtons()
     elseif turnState == 'post figure events - phantom' then
         getActiveFigures()
