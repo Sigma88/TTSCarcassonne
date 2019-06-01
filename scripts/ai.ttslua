@@ -2349,8 +2349,8 @@ function AICalculateFeatureJoinPercentage(traversedJoinOpenings, joinedFeatureNu
                                     for _, joinedFeatureNum in ipairs(features) do
                                         --FIXME: Currently only check a connected feature if it has an active figure. This is to save computation time. However it makes the behavior not as smart. Fix during optimization.
                                         --Also, if there is a case where a tile is added between two features that aren't normally joined, it can cause the AI to join them and think it is a powerful move, even if it does nothing.
-										if (joinedActiveFigures[joinedFeatureNum] ~= nil or tempFeatureList[joinedFeatureNum] ~= nil) and table.bininsertnodup(nestedJoinedFeatureNums, joinedFeatureNum) ~= nil then
-										--if table.bininsertnodup(nestedJoinedFeatureNums, joinedFeatureNum) ~= nil then
+                                        if (joinedActiveFigures[joinedFeatureNum] ~= nil or tempFeatureList[joinedFeatureNum] ~= nil) and table.bininsertnodup(nestedJoinedFeatureNums, joinedFeatureNum) ~= nil then
+                                        --if table.bininsertnodup(nestedJoinedFeatureNums, joinedFeatureNum) ~= nil then
                                             foundNewFeatureNum = true
                                             local joinedFeature = tempFeatureList[joinedFeatureNum]
                                             if joinedFeature == nil then joinedFeature = featureList[joinedFeatureNum] end

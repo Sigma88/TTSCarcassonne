@@ -46,7 +46,7 @@ function initializeControlPanelPage()
     self.UI.setAttribute("MessagesMessagesLabel", "text", translate("Messages"))
     self.UI.setAttribute("MessagesMessengerLabel", "text", translate("Messenger"))
 
-    self.UI.setAttribute("FerriesExpansionLabel", "text", "3 . " .. translate("The Ferries"))
+    self.UI.setAttribute("FerriesExpansionLabel", "text", "3. " .. translate("The Ferries"))
     self.UI.setAttribute("FerriesTilesLabel", "text", translate("LABEL_TILES"))
     self.UI.setAttribute("FerriesFerriesLabel", "text", translate("Ferries"))
 
@@ -54,7 +54,7 @@ function initializeControlPanelPage()
     self.UI.setAttribute("GoldminesTilesLabel", "text", translate("LABEL_TILES"))
     self.UI.setAttribute("GoldminesGoldLabel", "text", translate("Gold"))
 
-    self.UI.setAttribute("MnWExpansionLabel", "text", "5 . " .. translate("Mage & Witch"))
+    self.UI.setAttribute("MnWExpansionLabel", "text", "5. " .. translate("Mage & Witch"))
     self.UI.setAttribute("MnWTilesLabel", "text", translate("LABEL_TILES"))
     self.UI.setAttribute("MnWMageLabel", "text", translate("Mage"))
     self.UI.setAttribute("MnWWitchLabel", "text", translate("Witch"))
@@ -90,9 +90,9 @@ function initializeControlPanelPage()
     -- initializeCheckbox(COLUMN_2_7, ROW_3, 'MessagesMessenger', "")
 
 --The Ferries
-    -- initializeAllCheckbox(COLUMN_2_1, ROW_4, 'FerriesAll', "")
+    initializeAllCheckbox(COLUMN_2_1, ROW_4, 'FerriesAll', "TOOLTIP_ENABLE_ALL")
     initializeCheckbox(COLUMN_2_2, ROW_4, 'FerriesTiles', translate({"TOOLTIP_NUM_TILES", {'{n1}', 8}}))
-    -- initializeCheckbox(COLUMN_2_3, ROW_4, 'FerriesFerries', "")
+    initializeCheckbox(COLUMN_2_3, ROW_4, 'FerriesFerries', translate("TOOLTIP_FERRY"))
 
 --The Goldmines
     initializeAllCheckbox(COLUMN_2_5, ROW_4, 'GoldminesAll', translate("TOOLTIP_ENABLE_ALL"))

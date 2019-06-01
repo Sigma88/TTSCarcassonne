@@ -121,7 +121,7 @@ function addTile(xIndex, zIndex, tile, rotation, temp)
             local links = nil
 
             if position < 5 then
-                links = tile.getTable('linkedQuadrants')
+                links = getLinkedQuadrants(tile)
             elseif position < 13 then
                 links = tile.getTable('linkedOctants')
             end

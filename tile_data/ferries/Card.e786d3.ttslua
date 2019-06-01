@@ -1,3 +1,0 @@
-sides = {'Road', 'Road', 'Road', 'Road'}
-linkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}
-specialFeatures = {{'Lake', nil, nil}} 

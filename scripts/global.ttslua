@@ -61,8 +61,8 @@ MIDDLE_Z_OFFSET = 17
 MIDDLE_OFFSET = {x = MIDDLE_X_OFFSET * TILE_SPACING, z = MIDDLE_Z_OFFSET * TILE_SPACING}
 TABLE_SURFACE_Y = 1.03171348571777
 
-SIDE_DELTA = {{x=0,z=-1},{x=-1,z=0},{x=0,z=1},{x=1,z=0}} --relative 4 positions adjacent to the current tile
-DIAGONAL_DELTA = {{x=-1,z=1},{x=0,z=1},{x=1,z=1},{x=1,z=0},{x=1,z=-1},{x=0,z=-1},{x=-1,z=-1},{x=-1,z=0}} --relative 8 positions adjacent and diagonal to the current tile
+SIDE_DELTA = {{x = 0, z = -1}, {x = -1, z = 0}, {x = 0, z = 1}, {x = 1, z = 0}} --relative 4 positions adjacent to the current tile
+DIAGONAL_DELTA = {{x = -1, z = 1}, {x = 0, z = 1}, {x = 1, z = 1}, {x = 1, z = 0}, {x = 1, z = -1}, {x = 0, z = -1}, {x = -1, z = -1}, {x = -1, z = 0}} --relative 8 positions adjacent and diagonal to the current tile
 
 NEUTRAL_ITEMS_LOCATION = {x = 15.5, y = 1.5, z = 28.0}
 
@@ -72,7 +72,7 @@ MEEPLE_TYPES = {'Follower', 'Big Follower', 'Phantom'} --'normal' follower types
 FOLLOWER_TYPES = {'Follower', 'Big Follower', 'Phantom', 'Abbot', 'Mayor', 'Wagon'}
 SPECIAL_FIGURE_TYPES = {'Shepherd', 'Builder', 'Pig', 'Barn'}
 NEUTRAL_FIGURE_TYPES = {'Count', 'Dragon', 'Fairy', 'Tower'}
-TILE_FEATURES = {'Abbey', 'Volcano', 'Dragon', 'Magic Portal', 'Bazaar', 'Hill', 'Vineyard', 'Wheel-1', 'Wheel-2', 'Wheel-3', 'Gold'} --features that are not associated with any position or any other feature. They exist as a feature of the tile itself
+TILE_FEATURES = {'Abbey', 'Volcano', 'Dragon', 'Magic Portal', 'Bazaar', 'Hill', 'Vineyard', 'Wheel-1', 'Wheel-2', 'Wheel-3', 'Gold', 'Lake'} --features that are not associated with any position or any other feature. They exist as a feature of the tile itself
 PROXIMITY_FEATURES = {'Cloister', 'Abbey', 'Shrine', 'Garden', "Baba Yaga's Hut"} --features that change based on the actions of surrounding tiles
 CLOISTER_FEATURES = {'Cloister', 'Abbey', 'Shrine'} --features that are essentially cloisters in many aspects of the rules
 NUM_TOWERS_PER_PLAYER = {[1] = 10, [2] = 10, [3] = 9, [4] = 7, [5] = 6, [6] = 5}
@@ -114,13 +114,13 @@ PLAYER_POSSESSION_ZONE_DEPTH = 3.9
 PLAYER_POSSESSION_ZONE_WIDTH = 24.0
 PLAYER_POSSESSION_POSITIONS =
 {
-    ['KnRBRobber'] = {x=8.4, z=0.5},
-    ['KnRBKing'] = {x=10.4, z=0.5},
-    ['Cloth'] = {x=5.9, z=1.0},
-    ['Wine'] = {x=5.9, z=0.0},
-    ['Wheat'] = {x=6.9, z=1.0},
-    ['CapturedFollower'] = {x=10.9, z=-1.5},
-    ['Gold'] = {x=10.9, z=-0.75}
+    ['KnRBRobber'] = {x = 8.4, z = 0.5},
+    ['KnRBKing'] = {x = 10.4, z = 0.5},
+    ['Cloth'] = {x = 5.9, z = 1.0},
+    ['Wine'] = {x = 5.9, z = 0.0},
+    ['Wheat'] = {x = 6.9, z = 1.0},
+    ['CapturedFollower'] = {x = 10.9, z = -1.5},
+    ['Gold'] = {x = 10.9, z = -0.75}
 }
 PLAYER_POSSESSION_SPACING = 1.0 --spacing for multiple objects of the same type
 
@@ -251,7 +251,8 @@ EXPANSION_BAGS = {
         ['FlierDie'] = {guid = 'dc7bf3'}
     }},
     ['Ferries'] = {guid = '5506dd', contents = {
-        ['FerriesTiles'] = {guid = '2c894d'}
+        ['FerriesTiles'] = {guid = '2c894d'},
+        ['FerriesFerries'] = {guid = '6822b2'}
     }},
     ['Goldmines'] = {guid = '080d67', contents = {
         ['GoldminesTiles'] = {guid = 'bc8fac'},
@@ -286,12 +287,16 @@ EXPANSION_BAGS = {
 --  tile_GUID - the GUID of the tile at this location
 --  rotation - the rotation of the tile
 --  featureMap - a map of the standard featureLocations (1-12) to featureNums, which can be used as an index into featureList to get more data
---  specialFeatureLocations - a map of specialFeatures to their non-standard locations (given as {x=0.0, z=0.0} where the x and z are scaler locations of the feature within the tile (0.0, 0.0 being the center))
+--  specialFeatureLocations - a map of specialFeatures to their non-standard locations (given as {x = 0.0, z = 0.0} where the x and z are scaler locations of the feature within the tile (0.0, 0.0 being the center))
 --  (optional) tileFeatures - a table of features of the tile, which does not correspond to any other feature located in the tile
 --  (optional) ignoredFeatures - a table of standard locations that should not be used when finding the closest feature to a figure
 tileGrid = {}
 lastPlacedTileX = nil
 lastPlacedTileZ = nil
+PlacedFerries = {}
+FerriesLinkedQuadrants = {}
+lastFerryTile = nil
+lastFerryPos = nil
 
 --the next available featureNum that can be used for featureList. This is incremented for each new feature. Discarded featureNums are not recycled.
 featureIndex = 1
@@ -305,7 +310,7 @@ featureIndex = 1
 --  (optional) featureLocation - coordinates of this feature. Useful for locating a proximity feature.
 featureList = {}
 
---features that have a special "link" together. Each linked feature will be indexed by its featureNum to a table containing all linked features (each indexed itself). ie (linkedFeatures['City-Field'][3] = {[5]=true, [12]=true})
+--features that have a special "link" together. Each linked feature will be indexed by its featureNum to a table containing all linked features (each indexed itself). ie (linkedFeatures['City-Field'][3] = {[5] = true, [12] = true})
 linkedFeatures = {['City-Field'] = {}, ['Road Intersection'] = {}}
 
 droplock = false
@@ -404,29 +409,29 @@ figurePositions = {}
 activeFigures = {}
 
 player_possession_areas = {
-    ['Green'] = {x=28.35, z=12.1, rotation=3},
-    ['Purple'] = {x=28.35, z=-12.1, rotation=3},
-    ['White'] = {x=12.1, z=-28.35, rotation=2},
-    ['Blue'] = {x=-12.1, z=-28.35, rotation=2},
-    ['Red'] = {x=-28.35, z=-12.1, rotation=1},
-    ['Pink'] = {x=-28.35, z=12.1, rotation=1}
+    ['Green'] = {x = 28.35, z = 12.1, rotation = 3},
+    ['Purple'] = {x = 28.35, z = -12.1, rotation = 3},
+    ['White'] = {x = 12.1, z = -28.35, rotation = 2},
+    ['Blue'] = {x = -12.1, z = -28.35, rotation = 2},
+    ['Red'] = {x = -28.35, z = -12.1, rotation = 1},
+    ['Pink'] = {x = -28.35, z = 12.1, rotation = 1}
 }
 playerPossessionScriptingZones = {}
 
 showMarkers = 'Both'
 showMarkersButtonParam = {
     index = 0, click_function = 'showMarkersToggleButton',
-    position = {-0.8,0.1,0.0}, width = 750, height=600, font_size = 150, function_owner = nil
+    position = {-0.8, 0.1, 0.0}, width = 750, height = 600, font_size = 150, function_owner = nil
 }
 
 endGameButtonParam = {
     index = 1, click_function = 'startGameButton',
-    position = {1.0, 0.1, 0.0}, width = 750, height=600, font_size = 150, function_owner = nil
+    position = {1.0, 0.1, 0.0}, width = 750, height = 600, font_size = 150, function_owner = nil
 }
 
 skipTurnButtonParam = {
    index = 2, click_function = 'skipTurnButton',
-   position = {2.8, 0.1, 0.0}, width = 750, height=600, font_size = 150, function_owner = nil
+   position = {2.8, 0.1, 0.0}, width = 750, height = 600, font_size = 150, function_owner = nil
 }
 
 --default control panel settings are defined here

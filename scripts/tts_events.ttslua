@@ -23,6 +23,9 @@ function onload(save_state)
         controlPanelSettings = saved_data.controlPanelSettings
         showMarkers = saved_data.showMarkers
         tileGrid = saved_data.tileGrid
+        if saved_data.FerriesLinkedQuadrants ~= nil then
+            FerriesLinkedQuadrants = saved_data.FerriesLinkedQuadrants
+        end
         startingTile_GUID = saved_data.startingTile_GUID
         startingRiverTile_GUID = saved_data.startingRiverTile_GUID
         forkTile_GUID = saved_data.forkTile_GUID
@@ -136,10 +139,10 @@ function onload(save_state)
     math.randomseed(os.time())
     progressPartiallyCompleteStates()
     if turnState ~= 'pre-game' then
-		if turnState ~= 'game over - scoring' then
-			createRansomButtons()
+        if turnState ~= 'game over - scoring' then
+            createRansomButtons()
             highlightLastPlacedTiles()
-		end
+        end
         return stateHandler()
     end
     getObjectFromGUID(BUTTON_ANCHOR_GUID).interactable = false
@@ -167,6 +170,7 @@ function onSave()
         showMarkers = showMarkers,
         --global storage of all active (in-play) tile information
         tileGrid = tileGrid,
+        FerriesLinkedQuadrants = FerriesLinkedQuadrants,
         featureList = featureList,
         linkedFeatures = linkedFeatures,
         featureIndex = featureIndex,
