@@ -45558,7 +45558,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6}, {7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "c41adc"
             },
@@ -45605,7 +45605,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6}, {7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "626d48"
             },
@@ -45652,7 +45652,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'City', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6}, {7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "d15b0d"
             },
@@ -45699,7 +45699,7 @@
                 }
               },
               "XmlUI": "",
-              "LuaScript": "sides = {'Road', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 6, 7, 12}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
+              "LuaScript": "sides = {'Road', 'Road', 'Road', 'Road'}\nlinkedOctants = {{5, 12}, {6, 7}, {8, 9}, {10, 11}}\nspecialFeatures = {{'Lake', nil, nil}}",
               "LuaScriptState": "",
               "GUID": "a80716"
             }
