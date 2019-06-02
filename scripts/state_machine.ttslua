@@ -126,9 +126,23 @@ stateMachine = {
     },
     ['post figure events'] = {
         ['has lake'] = 'post figure events - place ferry',
+        ['move ferry'] = 'post figure events - move ferry 1',
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - place ferry'] = {
+        ['move ferry'] = 'post figure events - move ferry 1',
+        ['next'] = 'post figure events - phantom'
+    },
+    ['post figure events - move ferry 1'] = {
+        ['next'] = 'post figure events - move ferry 2'
+    },
+    ['post figure events - move ferry 2'] = {
+        ['next'] = 'post figure events - move ferry 3'
+    },
+    ['post figure events - move ferry 3'] = {
+        ['next'] = 'post figure events - move ferry 4'
+    },
+    ['post figure events - move ferry 4'] = {
         ['next'] = 'post figure events - phantom'
     },
     ['post figure events - phantom'] = {
@@ -399,15 +413,26 @@ function playerStateHandler()
         clearFigureOptions()
         seducedKnights = {}
         currentPlayerAbbot = nil
-        if turnState == 'post figure events' and checkTileForLake() then
-            lastFerryTile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
-            lastFerryPos = {x = lastPlacedTileX, z = lastPlacedTileZ}
-            return nextState('has lake')
+        if turnState == 'post figure events' then
+            local tile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
+            if checkTileForLake(tile) then
+                return nextState('has lake')
+            elseif checkMoveFerry() then
+                return nextState('move ferry')
+            end
         end
         return nextState('next')
     elseif turnState == 'post figure events - place ferry' then
         gameNotification({"MESSAGE_LAKE_PLACE_FERRY_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
-        return displayFerryButtons()
+        return displayFerryButtons(lastPlacedTileX, lastPlacedTileZ)
+    elseif turnState == 'post figure events - move ferry 1' then
+        searchFerrySide(1)
+    elseif turnState == 'post figure events - move ferry 2' then
+        searchFerrySide(2)
+    elseif turnState == 'post figure events - move ferry 3' then
+        searchFerrySide(3)
+    elseif turnState == 'post figure events - move ferry 4' then
+        searchFerrySide(4)
     elseif turnState == 'post figure events - phantom' then
         getActiveFigures()
         if baselineFigures[activePlayers[currentPlayer]]['Phantom'] then
