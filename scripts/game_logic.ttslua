@@ -1017,12 +1017,14 @@ function checkTileForMagicPortal()
     return nextState('next')
 end
 
-function checkTileForLake()
-    local tileFeatures = tileGrid[lastPlacedTileX][lastPlacedTileZ].tileFeatures
-    if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] and tileFeatures ~= nil then
-        for _, tileFeature in ipairs(tileFeatures) do
-            if tileFeature == 'Lake' then
-                return true
+function checkTileForLake(tile)
+    if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] then
+        local tileFeatures = tile.tileFeatures
+        if tileFeatures ~= nil
+            for _, tileFeature in ipairs(tileFeatures) do
+                if tileFeature == 'Lake' then
+                    return true
+                end
             end
         end
     end
@@ -1030,9 +1032,113 @@ function checkTileForLake()
 end
 
 function checkMoveFerry()
-    if turnState == 'post figure events - move ferry' then return false end
-    -- keep this feature off until it is completed
+    if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] then
+        if turnState == 'post figure events' or turnState == 'post figure events - place ferry' then
+            return true
+        end
+    end
     return false
+end
+
+function searchFerrySide(i)
+    -- define some needed variables
+    local lastPlacedTile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
+    local sides = getObjectFromGUID(lastPlacedTile.tile_guid).getTable('sides')
+
+    -- from the rules:
+    -- If the tile placed extends more than one road,
+    -- the player may move the nearest ferry on every road extended.
+    if sides[i] == 'Road' then
+        -- 0 start from distance = 1
+        local InvalidTiles = {}
+        local ConnectedTiles = {}
+        local LakeTiles = {}
+        local distance = 1
+        ConnectedTiles = { {} }
+        -- add the lastPlacedTile to the InvalidTiles list
+        InvalidTiles =
+        {
+            {x = lastPlacedTileX, z = lastPlacedTileZ, side = 1},
+            {x = lastPlacedTileX, z = lastPlacedTileZ, side = 2},
+            {x = lastPlacedTileX, z = lastPlacedTileZ, side = 3},
+            {x = lastPlacedTileX, z = lastPlacedTileZ, side = 4}
+        }
+        local s, x, z = getConnectingFeatureMapPosition(lastPlacedTileX, lastPlacedTileZ, i, lastPlacedTile.rotation)
+        if tileGridOccupied(x, z) then
+            s = (s + 5 - tileGrid[x][z].rotation) % 4 + 1
+            local tileInfo = {x = x, z = z, side = s}
+            table.insert(InvalidTiles, tileInfo)
+            table.insert(ConnectedTiles[distance], tileInfo)
+            if checkTileForLake(tileGrid[x][z]) then
+                table.insert(LakeTiles, tileInfo)
+            end
+
+            -- while there are connected tiles, but no lake tiles
+            while ConnectedTiles[distance][1] ~= nil and LakeTiles[1] == nil do
+                ConnectedTiles[distance + 1] = {}
+                -- go through all connected tiles
+                for _, info in ipairs(ConnectedTiles[distance]) do
+                    -- get the info of the previous tile
+                    local tile = tileGrid[info.x][info.z]
+                    local obj = getObjectFromGUID(tile.tile_guid)
+                    local linkedQuadrants = getLinkedQuadrants(obj)
+                    -- find if the streets connects to other tiles
+                    if linkedQuadrants ~= nil then
+                        for _, link in ipairs(linkedQuadrants) do
+                            if table.contains(link, info.side) then
+                                -- add all connected tiles to the lists
+                                for _, side in ipairs(link) do
+                                    if side ~= info.side then
+                                        local connectedSide, connectedX, connectedZ =
+                                            getConnectingFeatureMapPosition(info.x, info.z, side, tile.rotation)
+                                        if tileGridOccupied(connectedX, connectedZ) then
+                                            local connectedTile = tileGrid[connectedX][connectedZ]
+                                            connectedSide = (connectedSide - connectedTile.rotation + 5) % 4 + 1
+                                            local connectedInfo = {x = connectedX, z = connectedZ, side = connectedSide}
+
+                                            if not table.contains(InvalidTiles, connectedInfo) then
+                                                if connectedTile ~= nil then
+                                                    if checkTileForLake(connectedTile) then
+                                                        table.insert(LakeTiles, connectedInfo)
+                                                    end
+                                                    table.insert(InvalidTiles, connectedInfo)
+                                                    table.insert(ConnectedTiles[distance + 1], connectedInfo)
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                distance = distance + 1
+            end
+        end
+
+        -- 4 add buttons to all tiles in LakeTiles
+        if LakeTiles[1] ~= nil then
+            local index = 1
+            for _, lakeTile in ipairs(LakeTiles) do
+                createNormalizedTileButton
+                (
+                    tileGrid[lakeTile.x][lakeTile.z],
+                    {
+                        index = index, label = 'This is the Lake\nyou are looking for', click_function = 'banana',
+                        position = {x = 0, y = FLOATING_BUTTON_HEIGHT_LOW, z = 0}, width = 1800, height = 500, font_size = 200, function_owner = nil
+                    }
+                )
+                index = index + 1
+            end
+            return
+        end
+    end
+    return nextState('next')
+end
+
+function banana()
+    clearArbitraryButtons()
+    nextState('next')
 end
 
 function checkTileForGold()
@@ -1125,14 +1231,9 @@ function displayFerryButtons()
                             index = i, label = a .. ' and ' .. b, click_function = 'placeFerryOn' .. a .. b,
                             position = {x = TILE_SPACING * offset[a][b].x, y = FLOATING_BUTTON_HEIGHT_LOW, z = TILE_SPACING * offset[a][b].z}, width = 800, height = 300, font_size = 200, function_owner = nil
                         }
-                        local position = tile.getPosition()
                         createNormalizedTileButton
                         (
-                            {
-                                x = -position.x,
-                                y = TABLE_SURFACE_Y + TILE_THICKNESS / 2,
-                                z = position.z
-                            },
+                            lastFerryTile,
                             placeFerryParam
                         )
                     end
@@ -1190,7 +1291,7 @@ function placeFerryOn(link)
     lastFerryTile = nil
     lastFerryPos = nil
     if checkMoveFerry() then
-        return nextState('post figure events - move ferry')
+        return nextState('move ferry')
     end
     return nextState('next')
 end
@@ -1467,11 +1568,17 @@ function createNormalizedArbitraryButton(pivot_point, params, rotateToPlayer)
     getObjectFromGUID(BUTTON_ANCHOR_GUID).createButton(params)
 end
 
-function createNormalizedTileButton(pivot_point, params)
-    local tileRotation = -lastFerryTile.rotation
-    local rotation = -(tileRotation * 90)
+function createNormalizedTileButton(tile, params)
+    local position = getObjectFromGUID(tile.tile_guid).getPosition()
+    local pivot_point =
+    {
+        x = -position.x,
+        y = TABLE_SURFACE_Y + TILE_THICKNESS / 2,
+        z = position.z
+    }
+    local rotation = tile.rotation * 90
     while rotation < 0 do rotation = rotation + 360 end
-    local x, z = rotateCoordinates(params.position.x, params.position.z, ((-tileRotation + 7) % 4) + 1)
+    local x, z = rotateCoordinates(params.position.x, params.position.z, ((tile.rotation + 7) % 4) + 1)
 
     params.position = {x = x + pivot_point.x, y = params.position.y + pivot_point.y, z = z + pivot_point.z}
     params.rotation = {x = 0, y = rotation, z = 0}
