@@ -1020,10 +1020,31 @@ end
 function checkTileForLake(tile)
     if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] then
         local tileFeatures = tile.tileFeatures
-        if tileFeatures ~= nil
+        if tileFeatures ~= nil then
             for _, tileFeature in ipairs(tileFeatures) do
                 if tileFeature == 'Lake' then
                     return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+function checkTileForFerry(tile, side)
+    if controlPanelSettings['FerriesTiles'] and controlPanelSettings['FerriesFerries'] then
+        if tile ~= nil then
+            local linkedQuadrants = getLinkedQuadrants(getObjectFromGUID(tile.tile_guid))
+            if linkedQuadrants ~= nil then
+                if linkedQuadrants[1] ~= nil then
+                    if side == nil then
+                        return true
+                    end
+                    for _, n in ipairs(linkedQuadrants[1]) do
+                        if n == side then
+                            return true
+                        end
+                    end
                 end
             end
         end
@@ -1070,7 +1091,9 @@ function searchFerrySide(i)
             table.insert(InvalidTiles, tileInfo)
             table.insert(ConnectedTiles[distance], tileInfo)
             if checkTileForLake(tileGrid[x][z]) then
-                table.insert(LakeTiles, tileInfo)
+                if checkTileForFerry(tileGrid[x][z], s) then
+                    table.insert(LakeTiles, tileInfo)
+                end
             end
 
             -- while there are connected tiles, but no lake tiles
@@ -1099,7 +1122,9 @@ function searchFerrySide(i)
                                             if not table.contains(InvalidTiles, connectedInfo) then
                                                 if connectedTile ~= nil then
                                                     if checkTileForLake(connectedTile) then
-                                                        table.insert(LakeTiles, connectedInfo)
+                                                        if checkTileForFerry(connectedTile, connectedSide) then
+                                                            table.insert(LakeTiles, connectedInfo)
+                                                        end
                                                     end
                                                     table.insert(InvalidTiles, connectedInfo)
                                                     table.insert(ConnectedTiles[distance + 1], connectedInfo)
