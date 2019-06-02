@@ -291,12 +291,11 @@ EXPANSION_BAGS = {
 --  (optional) tileFeatures - a table of features of the tile, which does not correspond to any other feature located in the tile
 --  (optional) ignoredFeatures - a table of standard locations that should not be used when finding the closest feature to a figure
 tileGrid = {}
+activeTiles = {}
 lastPlacedTileX = nil
 lastPlacedTileZ = nil
 PlacedFerries = {}
 FerriesLinkedQuadrants = {}
-lastFerryTile = nil
-lastFerryPos = nil
 
 --the next available featureNum that can be used for featureList. This is incremented for each new feature. Discarded featureNums are not recycled.
 featureIndex = 1

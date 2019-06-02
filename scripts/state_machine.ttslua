@@ -416,8 +416,6 @@ function playerStateHandler()
         if turnState == 'post figure events' then
             local tile = tileGrid[lastPlacedTileX][lastPlacedTileZ]
             if checkTileForLake(tile) then
-                lastFerryTile = tile
-                lastFerryPos = {x = lastPlacedTileX, z = lastPlacedTileZ}
                 return nextState('has lake')
             elseif checkMoveFerry() then
                 return nextState('move ferry')
@@ -426,7 +424,7 @@ function playerStateHandler()
         return nextState('next')
     elseif turnState == 'post figure events - place ferry' then
         gameNotification({"MESSAGE_LAKE_PLACE_FERRY_PROMPT"}, NEUTRAL_COLOR, activePlayers[currentPlayer])
-        return displayFerryButtons()
+        return displayFerryButtons(lastPlacedTileX, lastPlacedTileZ)
     elseif turnState == 'post figure events - move ferry 1' then
         searchFerrySide(1)
     elseif turnState == 'post figure events - move ferry 2' then
